@@ -69,14 +69,14 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
     printf("%s : %d\n", source.text, source.size);
 
     options.mainSourceFile = source.fileName;
-	options.entryFunctionName = "main";
-	options.macroDefinitions = NULL;
+    options.entryFunctionName = "main";
+    options.macroDefinitions = NULL;
     options.locale = 0;
-	options.useFx = 0;
-	options.warningLevel = 3;
-	options.optimizationLevel = 3;  // Lol. Fuck you Rinne
-	options.useFastmath = 1;
-	options.useFastint = 1;
+    options.useFx = 0;
+    options.warningLevel = 3;
+    options.optimizationLevel = 3;  // Lol. Fuck you Rinne
+    options.useFastmath = 1;
+    options.useFastint = 1;
     options.warningsAsErrors = 0;
     options.useFastprecision = 0;
     options.pedantic = 0;
@@ -164,5 +164,5 @@ int module_stop(SceSize argc, const void *args)
 {
     unloadModules();
     taiHookRelease(hook, hookRef);
-	return SCE_KERNEL_STOP_SUCCESS;	
+    return SCE_KERNEL_STOP_SUCCESS;	
 }
