@@ -1,5 +1,4 @@
 PLUGIN  = pib
-LIB 	= pib.a
 OBJS    = src/main.o
 
 LIBS    = -lSceShaccCg_stub_weak -ltaihen_stub -lSceLibc_stub -lSceLibKernel_stub -lSceKernelModulemgr_stub
@@ -18,7 +17,7 @@ debug: all
 plugin: $(PLUGIN).suprx
 
 lib: CFLAGS += -DLIB
-lib: $(LIB)
+lib: $(PLUGIN).a
 
 %.suprx: %.velf
 	dolce-make-fself $< $@
@@ -29,14 +28,14 @@ lib: $(LIB)
 $(PLUGIN).elf: $(OBJS)
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
-$(LIB): $(OBJS) 
+$(PLUGIN).a: $(OBJS) 
 	$(AR) -rc $@ $^
 
 clean:
-	@rm -rf $(PLUGIN).suprx $(PLUGIN).velf $(PLUGIN).elf $(OBJS) $(LIB)
+	@rm -rf $(PLUGIN).suprx $(PLUGIN).velf $(PLUGIN).elf $(OBJS) $(PLUGIN).a
 
-install: $(LIB)
+install: $(PLUGIN).a
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
-	cp $(LIB) $(DESTDIR)$(PREFIX)/lib/
+	cp $(PLUGIN).a $(DESTDIR)$(PREFIX)/lib/
 	@mkdir -p $(DESTDIR)$(PREFIX)/include/
 	cp include/pib.h $(DESTDIR)$(PREFIX)/include/
