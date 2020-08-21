@@ -25,11 +25,11 @@ lib: $(PLUGIN).a
 %.velf: %.elf
 	dolce-elf-create $< $@
 
+%.a: $(OBJS) 
+	$(AR) -rc $@ $^
+
 $(PLUGIN).elf: $(OBJS)
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
-
-$(PLUGIN).a: $(OBJS) 
-	$(AR) -rc $@ $^
 
 clean:
 	@rm -rf $(PLUGIN).suprx $(PLUGIN).velf $(PLUGIN).elf $(OBJS) $(PLUGIN).a
