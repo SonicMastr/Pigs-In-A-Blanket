@@ -173,16 +173,10 @@ int pibInit(int ShaccCgOptions)
 #endif
 {
     if (ShaccCgOptions) {
-        switch (ShaccCgOptions) {
-            case 1:
-                shaccCgDisabled = 1;
-                break;
-            case 2:
-                shaccCgDisabled = 2;
-                break;
-            default:
-                break;
-        }
+        if (ShaccCgOptions == 1)
+            shaccCgDisabled = 1;
+        else if (ShaccCgOptions == 2)
+            shaccCgDisabled = 2;
     }
 
     int ret;
