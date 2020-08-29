@@ -22,18 +22,37 @@
 #ifndef PIB_H_
 #define PIB_H_
 
+#include <psp2common/types.h>
+
+/**
+ * @brief Initialization options for PIB. If shaccCgEnabled is not specified,
+ *  PIB will start without Runtime Shader Compiler support. noStdLib should only be used if
+ *  you do not use newlib and opt for SceLibc.
+ * 
+ */
+typedef struct _PibOptions {
+    SceBool shaccCgEnabled;
+    SceBool noStdLib;
+} PibOptions;
+
 /**
  * @brief Initializes Piglet and optionally SceShaccCg, the Native Runtime Shader Compiler. 
- * Searches the "ur0:data/external" directory
- * @param[in] ShaccCgOptions 0: Enabled, 1: Enabled Without Diagnostics, 2: Disabled
- * @return 0 on success, -1 if libshacccg.suprx is not present, -2 if libScePiglet.suprx is not present 
+ *  Searches the "ur0:data/external" directory
+ * 
+ * @param[in] pibOptions 
+ *  Intialization options for PIB
+ * 
+ * @return 0 on success, -1 if libshacccg.suprx is not present (ShaccCgEnabled option only), -2 if libScePiglet.suprx is not present,
+ *  -3 if libc could not load (noStdLib option only), -4 if libfios2 could not load (noStdLib option only)
+ * 
  */
-int pibInit(int ShaccCgOptions);
+int pibInit(PibOptions *pibOptions);
 
 /**
  * @brief Terminates and unloads Piglet and optionally SceShaccCg if specified by pibInit
  * 
  * @return int 
+ * 
  */
 int pibTerm(void);
 

@@ -26,184 +26,60 @@
 #include <psp2/kernel/modulemgr.h>
 #include <psp2/shacccg.h>
 #include <psp2/kernel/clib.h>
+#include "../include/hooks.h"
 #include <taihen.h>
 
-static tai_hook_ref_t hookRef;
-static SceShaccCgSourceFile source;
-static SceUID hook;
-static SceUID pigID, shID;
-static int shaccCgDisabled = 0;  // 0 Enabled, 1 Enabled Without Diagnostics, 2 Disabled
+static SceUID modID[4];
 
-static const SceShaccCgCompileOutput *output = NULL;
-
-static size_t logShaccCg(const SceShaccCgCompileOutput *output, char *shaderLog)
+static int loadModules(PibOptions *options)
 {
-    for (int i = 0; i < output->diagnosticCount; ++i) {
-		const SceShaccCgDiagnosticMessage *log = &output->diagnostics[i];
-        char diagnosticLevel[8];
-        switch (log->level)
-        {
-            case SCE_SHACCCG_DIAGNOSTIC_LEVEL_INFO:
-                strcpy(diagnosticLevel, "INFO");
-                break;
-            case SCE_SHACCCG_DIAGNOSTIC_LEVEL_WARNING:
-                strcpy(diagnosticLevel, "WARNING");
-                break;
-            case SCE_SHACCCG_DIAGNOSTIC_LEVEL_ERROR:
-                strcpy(diagnosticLevel, "ERROR");
-                break;
-        }
-        if (log->location)
-            sprintf(shaderLog, "[%s] Line %d: %s\n", diagnosticLevel, log->location->lineNumber, log->message);
-		else
-            sprintf(shaderLog, "[%s] %s\n", diagnosticLevel, log->message);
-	}
-    return strlen(shaderLog);
-}
-
-static SceShaccCgSourceFile *openFile_callback(const char *filename, const SceShaccCgSourceLocation *includedFrom, const SceShaccCgCompileOptions *compileOptions, ScePVoid userData, const char **errorString)
-{
-    return &source;
-}
-
-static int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
-{
-    source.fileName = "";  // Crashes Otherwise. Name doesn't matter
-    source.text = *(char **)(shader + 0x20);  // Shader Data Pointer
-    source.size = *(int *)(shader + 0x24);  // Shader Data Size Pointer
-
-    if (source.size >= 3 && !strncmp(source.text, "GXP", 3))
-    {
-        SceUInt8 *shaderData = malloc(source.size);
-        memcpy(shaderData, source.text, source.size);
-        *(SceUInt8**)(shader + 0x34) = shaderData;   // Compiled Shader Data Pointer
-        *(SceInt32*)(shader + 0x38) = source.size;  // Compiled Shader Data Size Pointer
-        *(int*)(&shader + 0x30) = 1;    // Flags Indicating Successful Compile
-        *(int*)(&shader + 0x1d) = 2;
-        
-        return 1;
+    if (!options->noStdLib) {
+        if (modID[3] = sceKernelLoadStartModule("vs0:sys/external/libfios2.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[3] < 0 && modID[3] != 0x8002D014)
+            return -4;
+        if (modID[2] = sceKernelLoadStartModule("vs0:sys/external/libc.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[2] < 0 && modID[2] != 0x8002D014)
+            return -3;
     }
-    else {
-        SceShaccCgCallbackList callback = {0};
-        SceShaccCgCompileOptions options;
-
-        sceShaccCgInitializeCallbackList(&callback, 1);
-        callback.openFile = openFile_callback;
-        sceShaccCgInitializeCompileOptions(&options);
-
-        int shaderType = *(int *)(shader + 0x1c);
-        switch (shaderType)
-        {
-            case 1:
-                options.targetProfile = SCE_SHACCCG_PROFILE_VP;
-                break;
-            case 2:
-                options.targetProfile = SCE_SHACCCG_PROFILE_FP;
-                break;
-        }
-
-        options.mainSourceFile = source.fileName;
-        options.entryFunctionName = "main";
-        options.macroDefinitions = NULL;
-        options.locale = 0;
-        options.useFx = 0;
-        options.warningLevel = 3;
-        options.optimizationLevel = 3;  // Lol. Fuck you Rinne
-        options.useFastmath = 1;
-        options.useFastint = 1;
-        options.warningsAsErrors = 0;
-        options.useFastprecision = 0;
-        options.pedantic = 0;
-        options.performanceWarnings = 0;
-
-        output = sceShaccCgCompileProgram(&options, &callback, 0);
-    }
-
-    char log[0x1024];
-    size_t logLength = logShaccCg(output, log); // Prepare the Shader Log
-    SceUInt8 *shaderLogData = malloc(logLength + 1);
-    memcpy(shaderLogData, log, logLength + 1);
-    *(SceInt32*)(shader + 0x2c) = logLength + 1; // Shader Log Length
-    *(SceUInt8**)(shader + 0x28) = shaderLogData; // Shader Log Data
-
-    if (output->programData)
-    {
-        SceUInt8 *shaderData = malloc(output->programSize);
-        memcpy(shaderData, output->programData, output->programSize);
-        *(SceUInt8**)(shader + 0x34) = shaderData;   // Compiled Shader Data Pointer
-        *(SceInt32*)(shader + 0x38) = output->programSize;  // Compiled Shader Data Size Pointer
-        *(int*)(&shader + 0x30) = 1;    // Flags Indicating Successful Compile
-        *(int*)(&shader + 0x1d) = 2;
-
-        sceShaccCgDestroyCompileOutput(output);
-        return 1;
-    }
-    else {
-        *(int*)(&shader + 0x30) = 0;
-        sceShaccCgDestroyCompileOutput(output);
-        return 0;
-    }
-}
-
-static int loadModules(void)
-{
-    if (pigID = sceKernelLoadStartModule("ur0:data/external/libScePiglet.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), pigID < 0)
+    if (modID[1]= sceKernelLoadStartModule("ur0:data/external/libScePiglet.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[1] < 0)
         return -2;
-    if (shaccCgDisabled != 2) {
-        if (shID = sceKernelLoadStartModule("ur0:data/external/libshacccg.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), shID < 0)
+    if (options->shaccCgEnabled) {
+        printf("Shacc %d\n", options->shaccCgEnabled);
+        if (modID[0] = sceKernelLoadStartModule("ur0:data/external/libshacccg.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[0] < 0)
             return -1;
         sceShaccCgSetMemAllocator(malloc, free);
     }
     return 0;
 }
 
-static int unloadModules(void)
+static void unloadModules(void)
 {
-    sceKernelStopUnloadModule(pigID, 0, NULL, 0, NULL, 0);
-    if (shaccCgDisabled != 2)
-        sceKernelStopUnloadModule(shID, 0, NULL, 0, NULL, 0);
-    return 0;
+    for (int i; i < 4; i++) {
+        if (modID[i])
+            sceKernelStopUnloadModule(modID[i], 0, NULL, 0, NULL, 0);
+    }
 }
 
-#ifndef LIB
+#ifdef PLUGIN
 void _start() __attribute__ ((weak, alias ("module_start")));
-int module_start(SceSize ShaccCgOptions, const void *args)
+int module_start(SceSize args, PibOptions *options)
 #else
-int pibInit(int ShaccCgOptions)
+int pibInit(PibOptions *options)
 #endif
 {
-    if (ShaccCgOptions) {
-        if (ShaccCgOptions == 1)
-            shaccCgDisabled = 1;
-        else if (ShaccCgOptions == 2)
-            shaccCgDisabled = 2;
-    }
-
     int ret;
-    if (ret = loadModules(), ret)
+    if (ret = loadModules(options), ret)
         return ret;
-
-    if (shaccCgDisabled != 2) {
-        tai_module_info_t info;
-
-        info.size = sizeof(info);
-        taiGetModuleInfo("libScePiglet", &info);
-        hook = taiHookFunctionOffset(&hookRef, info.modid, 0, 0x32BB4, 1, pglPlatformShaderCompiler_CustomPatch);
-#ifdef DEBUG_MODE
-        printf("Hook 0x%08x\n", hook);
-#endif
-    }
-
+   
+    loadHooks(options);
     return 0;
 }
 
-#ifndef LIB
+#ifdef PLUGIN
 int module_stop(SceSize argc, const void *args)
 #else
 int pibTerm(void)
 #endif
 {
     unloadModules();
-    taiHookRelease(hook, hookRef);
+    releaseHooks();
     return 0;	
 }
