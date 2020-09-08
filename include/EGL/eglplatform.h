@@ -148,7 +148,6 @@ typedef khronos_uintptr_t  EGLNativeWindowType;
 
 #elif defined(__VITA__)
 
-
 typedef void *EGLNativeDisplayType;
 typedef void *EGLNativePixmapType;
 typedef void *EGLNativeWindowType;

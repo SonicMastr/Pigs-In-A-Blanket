@@ -56,4 +56,18 @@ int pibInit(PibOptions *pibOptions);
  */
 int pibTerm(void);
 
+/**
+ * @brief Enums for eglCreateWindowSurface's EGLNativeWindowType parameter
+ * 
+ */
+typedef enum vitaEGLNativeWindowType {
+    VITA_INVALID_WINDOW = 0,
+    VITA_WINDOW_960X544,
+    VITA_WINDOW_720X408,
+    VITA_WINDOW_640X368,
+    VITA_WINDOW_480X272,
+    VITA_WINDOW_1280X720,
+    VITA_WINDOW_1920X1080
+} VitaEGLNativeWindowType;
+
 #endif

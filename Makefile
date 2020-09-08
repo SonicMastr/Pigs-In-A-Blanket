@@ -1,4 +1,4 @@
-PLUGIN  = pib
+LIB  	= pib
 OBJS    = src/main.o src/hooks.o src/shacccgpatch.o src/patches.o
 
 LIBS    = -lSceShaccCg_stub_weak -ltaihen_stub -lSceLibc_stub -lSceLibKernel_stub -lSceKernelModulemgr_stub -lSceGxm_stub
@@ -6,37 +6,25 @@ LIBS    = -lSceShaccCg_stub_weak -ltaihen_stub -lSceLibc_stub -lSceLibKernel_stu
 PREFIX  ?= ${DOLCESDK}/arm-dolce-eabi
 CC      = arm-dolce-eabi-gcc
 AR      = arm-dolce-eabi-ar
-CFLAGS  = -Wl,-q -Wall -Wincompatible-pointer-types -Wpointer-sign -O3 -nostartfiles -nostdlib
+CFLAGS  = -Wl,-q -Wall -Wno-incompatible-pointer-types -Wno-pointer-sign -O3 -nostartfiles -nostdlib -D__VITA__
 ASFLAGS = $(CFLAGS)
 
-all: lib plugin
+all: lib
 
 debug: CFLAGS += -DDEBUG_MODE
-debug: all
+debug: lib
 
-plugin: CFLAGS += -DPLUGIN
-plugin: $(PLUGIN).suprx
-
-lib: lib$(PLUGIN).a
-
-%.suprx: %.velf
-	dolce-make-fself $< $@
-
-%.velf: %.elf
-	dolce-elf-create $< $@
+lib: lib$(LIB).a
 
 %.a: $(OBJS) 
 	$(AR) -rc $@ $^
 
-$(PLUGIN).elf: $(OBJS)
-	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
-
 clean:
-	@rm -rf $(PLUGIN).suprx $(PLUGIN).velf $(PLUGIN).elf $(OBJS) $(PLUGIN).a
+	@rm -rf $(OBJS) lib$(LIB).a
 
-install: $(PLUGIN).a
+install: lib$(LIB).a
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
-	cp lib$(PLUGIN).a $(DESTDIR)$(PREFIX)/lib/
+	cp lib$(LIB).a $(DESTDIR)$(PREFIX)/lib/
 	@mkdir -p $(DESTDIR)$(PREFIX)/include/
 	cp include/pib.h $(DESTDIR)$(PREFIX)/include/
 	cp -r include/EGL $(DESTDIR)$(PREFIX)/include/

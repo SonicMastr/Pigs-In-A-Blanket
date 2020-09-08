@@ -134,9 +134,7 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
         sceShaccCgDestroyCompileOutput(output);
         return 1;
     }
-    else {
-        *(int*)(&shader + 0x30) = 0;
-        sceShaccCgDestroyCompileOutput(output);
-        return 0;
-    }
+    *(int*)(&shader + 0x30) = 0;
+    sceShaccCgDestroyCompileOutput(output);
+    return 0;
 }

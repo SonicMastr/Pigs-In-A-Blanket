@@ -26,9 +26,6 @@
 #include "../include/patches.h"
 #include "../include/hooks.h"
 
-extern tai_hook_ref_t hookRef[NUM_HOOKS];
-extern SceUID hook[NUM_HOOKS];
-
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams)
 {
     if (*(int *)(textureUploadParams + 0xd0) != 0)
@@ -64,4 +61,23 @@ void _pglPlatformTextureUploadParams_patch(int textureUploadParams)
     }
 
     TAI_CONTINUE(void, hookRef[1], textureUploadParams);
+}
+
+int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *attrib_list)
+{
+    switch (win)
+    {
+        case 5:
+            *(int16_t *)(dpy + 0x26) = 1280;
+            *(int16_t *)(dpy + 0x28) = 725;
+            *(int16_t *)(dpy + 0x2A) = 1280;
+            break;
+        case 6:
+            *(int16_t *)(dpy + 0x26) = 1920;
+            *(int16_t *)(dpy + 0x28) = 1088;
+            *(int16_t *)(dpy + 0x2A) = 1920;
+            break;
+    }
+
+    return TAI_CONTINUE(int, hookRef[2], dpy, config, win, attrib_list);
 }

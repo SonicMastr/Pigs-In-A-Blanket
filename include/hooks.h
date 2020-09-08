@@ -25,7 +25,10 @@
 #include "../include/pib.h"
 #include <taihen.h>
 
-#define NUM_HOOKS 2
+#define NUM_HOOKS 3
+
+extern tai_hook_ref_t hookRef[NUM_HOOKS];
+extern SceUID hook[NUM_HOOKS];
 
 void loadHooks(PibOptions *options);
 void releaseHooks(void);

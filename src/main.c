@@ -52,18 +52,13 @@ static int loadModules(PibOptions *options)
 
 static void unloadModules(void)
 {
-    for (int i; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         if (modID[i])
             sceKernelStopUnloadModule(modID[i], 0, NULL, 0, NULL, 0);
     }
 }
 
-#ifdef PLUGIN
-void _start() __attribute__ ((weak, alias ("module_start")));
-int module_start(SceSize args, PibOptions *options)
-#else
 int pibInit(PibOptions *options)
-#endif
 {
     int ret;
     if (ret = loadModules(options), ret)
@@ -73,11 +68,7 @@ int pibInit(PibOptions *options)
     return 0;
 }
 
-#ifdef PLUGIN
-int module_stop(SceSize argc, const void *args)
-#else
 int pibTerm(void)
-#endif
 {
     unloadModules();
     releaseHooks();

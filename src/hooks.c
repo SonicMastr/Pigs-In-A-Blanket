@@ -43,14 +43,16 @@ void loadHooks(PibOptions *options)
 #endif
     }
     hook[1] = taiHookFunctionOffset(&hookRef[1], info.modid, 0, 0x39770, 1, _pglPlatformTextureUploadParams_patch);
+    hook[2] = taiHookFunctionExport(&hookRef[2], info.name, 0xB4FE1ABB, 0x4B86317A, eglCreateWindowSurface_resolutionPatch);
 #ifdef DEBUG_MODE
     printf("Hook 1: 0x%08x\n", hook[1]);
+    printf("Hook 2: 0x%08x\n", hook[2]);
 #endif
 }
 
 void releaseHooks(void)
 {
-    for (int i; i < NUM_HOOKS; i++)
+    for (int i = 0; i < NUM_HOOKS; i++)
     {
         taiHookRelease(hook[i], hookRef[i]);
     }
