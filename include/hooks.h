@@ -29,6 +29,7 @@
 
 extern tai_hook_ref_t hookRef[NUM_HOOKS];
 extern SceUID hook[NUM_HOOKS];
+extern int customResolutionMode;
 
 void loadHooks(PibOptions *options);
 void releaseHooks(void);

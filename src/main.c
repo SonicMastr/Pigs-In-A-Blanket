@@ -25,6 +25,7 @@
 #include <psp2/types.h>
 #include <psp2/kernel/modulemgr.h>
 #include <psp2/shacccg.h>
+#include <psp2/io/fcntl.h>
 #include <psp2/kernel/clib.h>
 #include "../include/hooks.h"
 #include <taihen.h>
@@ -42,7 +43,9 @@ static int loadModules(PibOptions *options)
     if (modID[1]= sceKernelLoadStartModule("ur0:data/external/libScePiglet.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[1] < 0)
         return -2;
     if (options->shaccCgEnabled) {
+#ifdef DEBUG_MODE
         printf("Shacc %d\n", options->shaccCgEnabled);
+#endif
         if (modID[0] = sceKernelLoadStartModule("ur0:data/external/libshacccg.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[0] < 0)
             return -1;
         sceShaccCgSetMemAllocator(malloc, free);
@@ -58,11 +61,27 @@ static void unloadModules(void)
     }
 }
 
+static void getResolutionConfig()
+{
+    SceUID fd;
+	fd = sceIoOpen("ur0:data/external/resolution.bin", SCE_O_RDONLY, 0666);
+	if(fd < 0){
+#ifdef DEBUG_MODE
+        printf("Error : File Open Error, 0x%08X.\n", fd);
+#endif
+        customResolutionMode = 0;
+		return;
+	}
+	sceIoRead(fd, &customResolutionMode, sizeof(int));
+	sceIoClose(fd);
+}
+
 int pibInit(PibOptions *options)
 {
-    int ret;
-    if (ret = loadModules(options), ret)
-        return ret;
+    int ret = loadModules(options);
+    if (ret) return ret;
+
+    getResolutionConfig();
    
     loadHooks(options);
     return 0;
