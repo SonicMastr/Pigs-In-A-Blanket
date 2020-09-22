@@ -1,8 +1,6 @@
 LIB  	= pib
 OBJS    = src/main.o src/hooks.o src/shacccgpatch.o src/patches.o
 
-LIBS    = -lSceShaccCg_stub_weak -ltaihen_stub -lSceLibc_stub -lSceLibKernel_stub -lSceKernelModulemgr_stub -lSceGxm_stub
-
 PREFIX  ?= ${DOLCESDK}/arm-dolce-eabi
 CC      = arm-dolce-eabi-gcc
 AR      = arm-dolce-eabi-ar

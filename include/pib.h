@@ -22,6 +22,10 @@
 #ifndef PIB_H_
 #define PIB_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <psp2common/types.h>
 
 /**
@@ -70,4 +74,8 @@ typedef enum vitaEGLNativeWindowType {
     VITA_WINDOW_1920X1080
 } VitaEGLNativeWindowType;
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* PIB_H_ */

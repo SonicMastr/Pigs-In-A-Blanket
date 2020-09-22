@@ -150,7 +150,7 @@ typedef khronos_uintptr_t  EGLNativeWindowType;
 
 typedef void *EGLNativeDisplayType;
 typedef void *EGLNativePixmapType;
-typedef void *EGLNativeWindowType;
+typedef int EGLNativeWindowType;
 
 #elif defined(__Fuchsia__)
 
