@@ -25,7 +25,7 @@
 #include <psp2/types.h>
 #include <psp2/kernel/modulemgr.h>
 #include <psp2/shacccg.h>
-#include <psp2/io/fcntl.h>
+#include <psp2/kernel/iofilemgr.h>
 #include <psp2/kernel/clib.h>
 #include "../include/hooks.h"
 #include <taihen.h>
