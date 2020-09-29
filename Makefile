@@ -1,5 +1,6 @@
 LIB  	= pib
 OBJS    = src/main.o src/hooks.o src/shacccgpatch.o src/patches.o
+INCLUDE = include
 
 PREFIX  ?= ${DOLCESDK}/arm-dolce-eabi
 CC      = arm-dolce-eabi-gcc
@@ -19,7 +20,7 @@ lib: lib$(LIB).a
 
 clean:
 	@rm -rf $(OBJS) lib$(LIB).a
-
+	
 install: lib$(LIB).a
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
 	cp lib$(LIB).a $(DESTDIR)$(PREFIX)/lib/

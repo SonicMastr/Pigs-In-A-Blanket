@@ -22,7 +22,6 @@
 #ifndef PATCHES_H_
 #define PATCHES_H_
 
-#include "EGL/eglplatform.h"
 #include <psp2/gxm.h>
 
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams);
