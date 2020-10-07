@@ -35,9 +35,12 @@ static SceUID modID[4];
 static int loadModules(PibOptions *options)
 {
     if (!options->noStdLib) {
-        if (modID[3] = sceKernelLoadStartModule("vs0:sys/external/libfios2.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[3] < 0 && modID[3] != 0x8002D014)
+        if (modID[3] = sceKernelLoadStartModule("vs0:sys/external/libfios2.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[3] < 0 && modID[3] != 0x8002D014 && modID[3] != 0x8002D013)
+        {
+            printf("sceKernelLoadStartModule() 0x%08X\n", modID[3]);
             return -4;
-        if (modID[2] = sceKernelLoadStartModule("vs0:sys/external/libc.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[2] < 0 && modID[2] != 0x8002D014)
+        }
+        if (modID[2] = sceKernelLoadStartModule("vs0:sys/external/libc.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[2] < 0 && modID[2] != 0x8002D014 && modID[2] != 0x8002D013)
             return -3;
     }
     if (modID[1]= sceKernelLoadStartModule("ur0:data/external/libScePiglet.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[1] < 0)
