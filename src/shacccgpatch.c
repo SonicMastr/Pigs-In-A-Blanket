@@ -101,7 +101,7 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
         options.mainSourceFile = source.fileName;
         options.entryFunctionName = "main";
         options.macroDefinitions = NULL;
-        options.locale = 0;
+        options.locale = 0; // 0 US, 1 JP
         options.useFx = 0;
         options.warningLevel = 3;
         options.optimizationLevel = 3;  // Lol. Fuck you Rinne
@@ -135,6 +135,5 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
         return 1;
     }
     *(int*)(&shader + 0x30) = 0;
-    sceShaccCgDestroyCompileOutput(output);
     return 0;
 }
