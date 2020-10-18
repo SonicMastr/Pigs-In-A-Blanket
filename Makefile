@@ -19,13 +19,21 @@ lib: lib$(LIB).a
 	$(AR) -rc $@ $^
 
 clean:
-	@rm -rf $(OBJS) lib$(LIB).a
+	@rm -rf combine $(OBJS) lib$(LIB).a
 	
 install: lib$(LIB).a
-	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
-	@cp lib$(LIB).a $(DESTDIR)$(PREFIX)/lib/
 	@mkdir -p $(DESTDIR)$(PREFIX)/include/
 	@cp include/pib.h $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/EGL $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/GLES2 $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/KHR $(DESTDIR)$(PREFIX)/include/
+	@mkdir -p combine
+	@cp $(DESTDIR)$(PREFIX)/lib/liblibScePiglet_stub.a combine
+	@cp $(DESTDIR)$(PREFIX)/lib/libSceShaccCg_stub.a combine
+	@cp libpib.a combine
+	@cd combine && $(AR) -x liblibScePiglet_stub.a
+	@cd combine && $(AR) -x libSceShaccCg_stub.a
+	@cd combine && $(AR) -x libpib.a
+	@cd combine && $(AR) -qc ../libpib.a *.o
+	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
+	@cp lib$(LIB).a $(DESTDIR)$(PREFIX)/lib/
