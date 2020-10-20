@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  ****************************************************************************/
+#pragma once
 
 #ifndef DEBUG_H_
 #define DEBUG_H_
@@ -25,8 +26,7 @@
 #ifdef DEBUG
 #define LOG(...) printf(__VA_ARGS__)
 #else
-void empty(void);
-#define LOG(...) empty();
+#define LOG(...) 0
 #endif
 
 #endif /* DEBUG_H_ */
