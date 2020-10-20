@@ -30,9 +30,11 @@ install: lib$(LIB).a
 	@mkdir -p combine
 	@cp $(DESTDIR)$(PREFIX)/lib/liblibScePiglet_stub.a combine
 	@cp $(DESTDIR)$(PREFIX)/lib/libSceShaccCg_stub.a combine
+	@cp $(DESTDIR)$(PREFIX)/lib/libtaihen_stub.a combine
 	@cp libpib.a combine
 	@cd combine && $(AR) -x liblibScePiglet_stub.a
 	@cd combine && $(AR) -x libSceShaccCg_stub.a
+	@cd combine && $(AR) -x libtaihen_stub.a
 	@cd combine && $(AR) -x libpib.a
 	@cd combine && $(AR) -qc ../libpib.a *.o
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
