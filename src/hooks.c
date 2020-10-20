@@ -26,29 +26,26 @@
 #include "../include/shacccgPatch.h"
 #include "../include/hooks.h"
 #include "../include/patches.h"
+#include "../include/debug.h"
 
 tai_hook_ref_t hookRef[NUM_HOOKS];
 SceUID hook[NUM_HOOKS];
 int customResolutionMode;
 
-void loadHooks(PibOptions *options)
+void loadHooks(PibOptions options)
 {
     tai_module_info_t info;
 
     info.size = sizeof(info);
     taiGetModuleInfo("libScePiglet", &info);
-    if (options->shaccCgEnabled) {
+    if (options & PIB_SHACCCG) {
         hook[0] = taiHookFunctionOffset(&hookRef[0], info.modid, 0, 0x32BB4, 1, pglPlatformShaderCompiler_CustomPatch);
-#ifdef DEBUG_MODE
-        printf("Hook 0: 0x%08x\n", hook[0]);
-#endif
+        LOG("ShaccCg Patch: 0x%08x\n", hook[0]);
     }
     hook[1] = taiHookFunctionOffset(&hookRef[1], info.modid, 0, 0x39770, 1, _pglPlatformTextureUploadParams_patch);
     hook[2] = taiHookFunctionExport(&hookRef[2], info.name, 0xB4FE1ABB, 0x4B86317A, eglCreateWindowSurface_resolutionPatch);
-#ifdef DEBUG_MODE
-    printf("Hook 1: 0x%08x\n", hook[1]);
-    printf("Hook 2: 0x%08x\n", hook[2]);
-#endif
+    LOG("Texture Upload Params Patch: 0x%08x\n", hook[1]);
+    LOG("Resolution Patch: 0x%08x\n", hook[2]);
 }
 
 void releaseHooks(void)

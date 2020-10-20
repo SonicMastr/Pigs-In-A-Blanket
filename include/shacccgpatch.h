@@ -24,4 +24,4 @@
 
 int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader);
 
-#endif
+#endif /* SHACCCGPATCH_H_ */

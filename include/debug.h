@@ -19,19 +19,14 @@
  * 
  ****************************************************************************/
 
-#ifndef HOOKS_H_
-#define HOOKS_H_
+#ifndef DEBUG_H_
+#define DEBUG_H_
 
-#include "../include/pib.h"
-#include <taihen.h>
+#ifdef DEBUG
+#define LOG(...) printf(__VA_ARGS__)
+#else
+void empty(void);
+#define LOG(...) empty();
+#endif
 
-#define NUM_HOOKS 3
-
-extern tai_hook_ref_t hookRef[NUM_HOOKS];
-extern SceUID hook[NUM_HOOKS];
-extern int customResolutionMode;
-
-void loadHooks(PibOptions options);
-void releaseHooks(void);
-
-#endif /* HOOKS_H_ */
+#endif /* DEBUG_H_ */

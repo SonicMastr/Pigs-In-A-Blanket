@@ -26,4 +26,4 @@
 
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams);
 int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *attrib_list);
-#endif
+#endif /* PATCHES_H_ */

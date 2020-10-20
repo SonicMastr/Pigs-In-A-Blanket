@@ -25,6 +25,7 @@
 #include <psp2/types.h>
 #include "../include/patches.h"
 #include "../include/hooks.h"
+#include "../include/debug.h"
 
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams)
 {

@@ -10,7 +10,7 @@ ASFLAGS = $(CFLAGS)
 
 all: lib
 
-debug: CFLAGS += -DDEBUG_MODE
+debug: CFLAGS += -DDEBUG
 debug: lib
 
 lib: lib$(LIB).a

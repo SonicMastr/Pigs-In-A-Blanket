@@ -25,6 +25,7 @@
 #include <psp2/types.h>
 #include <psp2/shacccg.h>
 #include <psp2/kernel/clib.h>
+#include "../include/debug.h"
 
 static SceShaccCgSourceFile source;
 static const SceShaccCgCompileOutput *output = NULL;
@@ -63,9 +64,7 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
 {
     source.fileName = "";  // Crashes Otherwise. Name doesn't matter
     source.text = *(char **)(shader + 0x20);  // Shader Data Pointer
-#ifdef DEBUG_MODE
-    printf(source.text);
-#endif
+    LOG(source.text);
     source.size = *(int *)(shader + 0x24);  // Shader Data Size Pointer
 
     if (source.size >= 3 && !strncmp(source.text, "GXP", 3))
