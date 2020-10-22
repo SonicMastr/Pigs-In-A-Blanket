@@ -26,7 +26,7 @@
 #ifdef DEBUG
 #define LOG(...) printf(__VA_ARGS__)
 #else
-#define LOG(...) 0
+#define LOG(...) (void*)0
 #endif
 
 #endif /* DEBUG_H_ */
