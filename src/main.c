@@ -29,6 +29,7 @@
 #include <psp2/kernel/clib.h>
 #include "../include/hooks.h"
 #include "../include/debug.h"
+#include "../include/sha1.h"
 #include <taihen.h>
 
 static SceUID modID[4];

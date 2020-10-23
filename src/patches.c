@@ -84,3 +84,22 @@ int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *at
 
     return TAI_CONTINUE(int, hookRef[2], dpy, config, win, attrib_list);
 }
+
+void *eglGetProcAddress_functionNamePatch(const char *procname)
+{
+
+    void *ret = TAI_CONTINUE(void*, hookRef[3], procname);
+
+    if(ret != NULL)
+        return ret;
+
+    char digest[21];
+    SHA1(digest, procname, strlen(procname)); // This may be slow. Look into different solutions
+    
+    void *function;
+    
+    if(taiGetModuleExportFunc("libScePiglet", 0xB4FE1ABB, *(uint32_t*)(&digest), (uintptr_t *)&function) < 0)
+        return NULL;
+
+    return function;
+}
