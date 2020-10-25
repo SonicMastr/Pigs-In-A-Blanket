@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <psp2/types.h>
-#include "../include/shacccgPatch.h"
+#include "../include/shacccgpatch.h"
 #include "../include/hooks.h"
 #include "../include/patches.h"
 #include "../include/debug.h"
