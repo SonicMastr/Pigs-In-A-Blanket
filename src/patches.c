@@ -90,8 +90,8 @@ void *eglGetProcAddress_functionNamePatch(const char *procname)
 
     void *ret = TAI_CONTINUE(void*, hookRef[3], procname);
 
-    if(ret != NULL)
-        return ret;
+    if(ret)
+        return ret; // Got an Extension function address. No need to do anything else.
 
     char digest[21];
     SHA1(digest, procname, strlen(procname)); // This may be slow. Look into different solutions

@@ -103,7 +103,7 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
         options.locale = 0; // 0 US, 1 JP
         options.useFx = 0;
         options.warningLevel = 3;
-        options.optimizationLevel = 3;  // Lol. Fuck you Rinne
+        options.optimizationLevel = 3;
         options.useFastmath = 1;
         options.useFastint = 1;
         options.warningsAsErrors = 0;
