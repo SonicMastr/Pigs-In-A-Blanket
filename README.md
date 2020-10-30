@@ -86,9 +86,6 @@ This library will allow us to add extensions using native functions as we feel f
 - **[Zer0xFF](https://github.com/Zer0xFF) and [masterzorag](https://github.com/masterzorag)** - Their amazing work on the PS4 Piglet reverse engineering
 
 ## GLSL to CG Conversion Resources
-Microsoft GLSL to HLSL: https://docs.microsoft.com/en-us/windows/uwp/gaming/glsl-to-hlsl-reference
-Nvidia CG Standard Library: http://developer.download.nvidia.com/cg/index_stdlib.html
-Nvidia CG GLSL Vert to CG: http://developer.download.nvidia.com/cg/glslv.html
-Nvidia CG GLSL Frag to CG: http://developer.download.nvidia.com/cg/glslf.html
+Microsoft GLSL to HLSL: https://docs.microsoft.com/en-us/windows/uwp/gaming/glsl-to-hlsl-reference<br>Nvidia CG Standard Library: http://developer.download.nvidia.com/cg/index_stdlib.html<br>Nvidia CG GLSL Vert to CG: http://developer.download.nvidia.com/cg/glslv.html<br>Nvidia CG GLSL Frag to CG: http://developer.download.nvidia.com/cg/glslf.html
 
 This requires both libshacccg.suprx and libScePiglet.suprx to be located in ur0:data/external
