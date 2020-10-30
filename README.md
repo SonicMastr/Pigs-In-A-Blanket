@@ -12,6 +12,8 @@ If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_
 
 Piglet needs an SceLibc heap size of at least 3MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
 
+`liblibScePiglet_stub.a` (Yes, that's the name), `libSceShaccCg_stub.a`, and `libtaihen_stub.a` are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
+
 To install Piglet on your Vita, just use the [Pigs in a Blanket Configuration Tool](https://github.com/SonicMastr/PIB-Configuration-Tool)
 
 Documentation Provided in the Headers. I'm clean.
