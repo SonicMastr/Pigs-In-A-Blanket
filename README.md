@@ -16,7 +16,6 @@ To install Piglet on your Vita, just use the [Pigs in a Blanket Configuration To
 Documentation Provided in the Headers. I'm clean.
 
 ## Full GLES 2.0 Support, Finally on the Vita
----
 After 2 months of Reverse Engineering and working to make this Library the best it could be, it's finally here.
 
 Thanks to the efforts of [GrapheneCt](https://github.com/GrapheneCt) and [dots-tb](https://github.com/dots-tb) with Vita Piglet, and to [Zer0xFF](https://github.com/Zer0xFF) and [masterzorag](https://github.com/masterzorag) with the PS4 Piglet, we have finally obtained the first full OpenGL GLES 2.0 Compliant graphics library for the Vita.
@@ -45,7 +44,6 @@ Piglet will remove the confusion of VitaGL and give developers a simpler, easier
 We want to give the developers the tools to make their homebrew the best they can be without the frustration of wondering if it *could* work.
 
 ## What is Pigs in a Blanket?
----
 This library is a developer focused wrapper which provides easy initialization with some quality of life features to support resolutions up to 1080p native on the Playstion TV, and on the Vita with Sharpscale. Developers can choose make their applications with one resolution in mind, as all long as the code is made to scale by dimension, PIB will handle the rest with it's companion app, the [Pigs in a Blanket Configuration Tool](https://github.com/SonicMastr/PIB-Configuration-Tool), which allows the user to specify their own preference of resultion that will automatically override the original settings. 
 
 It library doubles as the heart of Piglet's Shader compiling abilities, removed in the standalone module. I spent the time to rewrite the shader compiler code according to PSM specifications to re-enable the ShaccCg support that was removed. This includes proper return codes and regular log output, so you never have to wonder what's going on with your shaders.
@@ -55,7 +53,6 @@ This library also restores normal `eglGetProcAddress` functionality as the orign
 This library will allow us to add extensions using native functions as we feel fit. We'll accept the requests of any developers who have ideas of what extensions to add utilizing PIB, and they will all be able to be accessed via `eglGetProcAddress`.
 
 ## Supported Extensions
----
 |GL|EGL|
 |:-:|:-:|
 |GL_EXT_draw_instanced|EGL_SCE_piglet_sync|
@@ -79,7 +76,6 @@ This library will allow us to add extensions using native functions as we feel f
 |GL_IMG_texture_compression_pvrtc|
 
 ## Special Thanks
----
 - **[GrapheneCt](https://github.com/GrapheneCt)** - Finding the Piglet Module and being a main part of the Project in reverse engineering and testing
 - **[dots-tb](https://github.com/dots-tb)** - Initial idea of using PSM and efforts in getting all of the names for Piglet, as well as being a main part of the Project in reverse engineering and testing
 - **[cuevavirus](https://github.com/cuevavirus)** - Help with debugging and sense of direction
@@ -89,7 +85,6 @@ This library will allow us to add extensions using native functions as we feel f
 - **[Zer0xFF](https://github.com/Zer0xFF) and [masterzorag](https://github.com/masterzorag)** - Their amazing work on the PS4 Piglet reverse engineering
 
 ## GLSL to CG Conversion Resources
----
 Microsoft GLSL to HLSL: https://docs.microsoft.com/en-us/windows/uwp/gaming/glsl-to-hlsl-reference
 Nvidia CG Standard Library: http://developer.download.nvidia.com/cg/index_stdlib.html
 Nvidia CG GLSL Vert to CG: http://developer.download.nvidia.com/cg/glslv.html
