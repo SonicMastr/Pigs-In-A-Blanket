@@ -4,6 +4,7 @@
 ##### Compiling
 - Install [DolceSDK](https://github.com/DolceSDK/doc) (Has not been tested on VitaSDK as of yet)
 - Run ```make -j4 install```
+- Link libpib.a in your projects
 
 Note when building your projects:
 

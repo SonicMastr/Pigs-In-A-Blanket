@@ -50,7 +50,7 @@ static size_t logShaccCg(const SceShaccCgCompileOutput *output, char *shaderLog)
         if (log->location)
             sprintf(shaderLog, "[%s] Line %d: %s\n", diagnosticLevel, log->location->lineNumber, log->message);
 		else
-            sprintf(shaderLog, "[%s] %s\n", diagnosticLevel, log->message);
+            sprintf(shaderLog, "[%s] %s\n", diagnosticLevel, log->message); // Haven't ran into a case where this happens. May need confirmation.
 	}
     return strlen(shaderLog);
 }
