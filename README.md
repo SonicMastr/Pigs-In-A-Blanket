@@ -27,7 +27,7 @@ It library doubles as the heart of Piglet's Shader compiling abilities, removed 
 
 This library also restores normal `eglGetProcAddress` functionality as the orignal Piglet only returns extensions. Thanks to dots-tb we were able to create a simple patch to support returning GLES functions as well.
 
-#### Custom Extension Support
+### Custom Extension Support
 
 This library will allow us to add extensions using native functions as we feel fit. We'll accept the requests of any developers who have ideas of what extensions to add utilizing PIB, and they will all be able to be accessed via `eglGetProcAddress`.
 
