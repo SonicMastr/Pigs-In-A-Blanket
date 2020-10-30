@@ -1,5 +1,5 @@
 # Pigs In A Blanket | OpenGL ES 2.0 on the PS Vita by CBPS
-#### A Piglet/ShaccCg Wrapper Plugin for OpenGL ES 2.0 Support on the Vita
+#### A Piglet/ShaccCg Wrapper Library for OpenGL ES 2.0 Support on the Vita
 ---
 ##### Compiling
 - Install [DolceSDK](https://github.com/DolceSDK/doc) (Has not been tested on VitaSDK as of yet)
