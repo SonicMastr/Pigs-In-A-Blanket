@@ -15,6 +15,8 @@ Piglet needs an SceLibc heap size of at least 3MB to intialize. Without it, the 
 `liblibScePiglet_stub.a` (Yes, that's the name), `libSceShaccCg_stub.a`, and `libtaihen_stub.a` are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
 
 ### Check the "Samples" folder for examples of how to use PIB to initialize OpenGLES 2.0 with EGL or GLFW.
+Yes. We have a GLFW3 port for the vita. You can built it here: https://github.com/SonicMastr/glfw-vita
+Note: Button Mapping is not correct for anything but the Cross button. Hats and Analog Input are perfect. Also supports Touch.
 
 To install Piglet on your Vita, just use the [Pigs in a Blanket Configuration Tool](https://github.com/SonicMastr/PIB-Configuration-Tool)
 
