@@ -1362,6 +1362,23 @@ EGLAPI EGLuint64NV EGLAPIENTRY eglGetSystemTimeNV (void);
 #define EGL_TRIPLE_BUFFER_NV              0x3230
 #endif /* EGL_NV_triple_buffer */
 
+#ifndef EGL_SCE_piglet_sync
+#define EGL_SCE_piglet_sync 1
+typedef void *EGLPigletSyncSCE;
+typedef EGLPigletSyncSCE (EGLAPIENTRYP PFNEGLPIGLETCREATESYNCSCEPROC) (EGLDisplay dpy, EGLenum type, EGLint *attrib_list);
+typedef EGLBoolean (EGLAPIENTRYP PFNEGLPIGLETDESTROYSYNCSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync);
+typedef EGLBoolean (EGLAPIENTRYP PFNEGLPIGLETSCENESYNCPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync);
+typedef EGLint (EGLAPIENTRYP PFNEGLPIGLETCLIENTWAITSYNCSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint flags, EGLTimeKHR timeout);
+typedef EGLBoolean (EGLAPIENTRYP PFNEGLPIGLETGETSYNCATTRIBSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint attribute, EGLint *value);
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI EGLPigletSyncSCE EGLAPIENTRY eglPigletCreateSyncSCE (EGLDisplay dpy, EGLenum type, EGLint *attrib_list);
+EGLAPI EGLBoolean EGLAPIENTRY eglPigletDestroySyncSCE(EGLDisplay dpy, EGLPigletSyncSCE sync);
+EGLAPI EGLBoolean EGLAPIENTRY eglPigletSceneSync(EGLDisplay dpy, EGLPigletSyncSCE sync);
+EGLAPI EGLint EGLAPIENTRY eglPigletClientWaitSyncSCE (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint flags, EGLTimeKHR timeout);
+EGLAPI EGLBoolean EGLAPIENTRY eglPigletGetSyncAttribSCE (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint attribute, EGLint *value);
+#endif
+#endif /* EGL_SCE_piglet_sync */
+
 #ifndef EGL_TIZEN_image_native_buffer
 #define EGL_TIZEN_image_native_buffer 1
 #define EGL_NATIVE_BUFFER_TIZEN           0x32A0

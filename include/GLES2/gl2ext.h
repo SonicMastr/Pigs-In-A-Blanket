@@ -3903,6 +3903,27 @@ GL_APICALL void GL_APIENTRY glEndTilingQCOM (GLbitfield preserveMask);
 #define GL_WRITEONLY_RENDERING_QCOM       0x8823
 #endif /* GL_QCOM_writeonly_rendering */
 
+#ifndef GL_SCE_piglet_shader_binary
+#define GL_SCE_piglet_shader_binary 1
+#define GL_PIGLET_SHADER_BINARY_SCE    0x9270
+typedef void (GL_APIENTRYP PFNGLPIGLETGETPROGRAMBINARYSCEPROC) (GLuint shader, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glPigletGetShaderBinarySCE (GLuint shader, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary);
+#endif
+#endif /* GL_SCE_piglet_shader_binary */
+
+#ifndef GL_SCE_texture_resource
+#define GL_SCE_texture_resource 1
+typedef void (GL_APIENTRYP PFNGLTEXIMAGERESOURCESCEPROC) (GLenum target, const GLvoid *texture_resource_descriptor, GLsizei descriptor_size);
+typedef void (GL_APIENTRYP PFNGLMAPTEXTURERESOURCESCEPROC) (GLenum target, GLvoid *texture_resource_descriptor, GLsizei *descriptor_size);
+typedef void (GL_APIENTRYP PFNGLUNMAPTEXTURERESOURCESCEPROC) (GLenum target);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glTexImageResourceSCE (GLenum target, const GLvoid *texture_resource_descriptor, GLsizei descriptor_size);
+GL_APICALL void GL_APIENTRY glMapTextureResourceSCE (GLenum target, GLvoid *texture_resource_descriptor, GLsizei *descriptor_size);
+GL_APICALL void GL_APIENTRY glUnmapTextureResourceSCE (GLenum target);
+#endif
+#endif /* GL_SCE_texture_resource */
+
 #ifndef GL_VIV_shader_binary
 #define GL_VIV_shader_binary 1
 #define GL_SHADER_BINARY_VIV              0x8FC4
