@@ -28,7 +28,7 @@ This library is a developer focused wrapper which provides easy initialization a
 
 It library doubles as the heart of Piglet's Shader compiling abilities, removed in the standalone module. I spent the time to rewrite the shader compiler code according to PSM specifications to re-enable the ShaccCg support that was removed. This includes proper return codes and regular log output, so you never have to wonder what's going on with your shaders. Piglet **DOES NOT** support GLSL shaders though, so you'll need to convert the shaders to CG. Check the resources at the end of this README for converting your shaders.
 
-This library also restores normal `eglGetProcAddress` functionality as the orignal Piglet only returns extensions. Thanks to dots-tb we were able to create a simple patch to support returning GLES functions as well.
+This library also support EGL 1.5 `eglGetProcAddress` functionality using the `PIB_GET_PROC_ADDR_CORE` flag, as the orignal Piglet only returns extensions per EGL 1.4 standard. Thanks to dots-tb we were able to create a simple patch to support returning GLES functions as well.
 
 ### Custom Extension Support
 

@@ -35,7 +35,8 @@ extern "C" {
 typedef enum _PibOptions {
     PIB_NONE = 0, // Defaults
     PIB_SHACCCG = 1, // Enable Runtime CG Shader Compiler
-    PIB_NOSTDLIB = 2 // Enable support for -nostdlib usage
+    PIB_NOSTDLIB = 2, // Enable support for -nostdlib usage
+    PIB_GET_PROC_ADDR_CORE = 4 // Enables EGL 1.5-like support for getting core GL functions with eglGetProcAddress
 } PibOptions;
 
 /**
