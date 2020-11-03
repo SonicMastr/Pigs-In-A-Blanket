@@ -28,9 +28,9 @@ install: lib$(LIB).a
 	@cp -r include/GLES2 $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/KHR $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p combine
-	@cp $(DESTDIR)$(PREFIX)/lib/liblibScePiglet_stub.a combine
-	@cp $(DESTDIR)$(PREFIX)/lib/libSceShaccCg_stub.a combine
-	@cp $(DESTDIR)$(PREFIX)/lib/libtaihen_stub.a combine
+	@cp $(PREFIX)/lib/liblibScePiglet_stub.a combine
+	@cp $(PREFIX)/lib/libSceShaccCg_stub.a combine
+	@cp $(PREFIX)/lib/libtaihen_stub.a combine
 	@cp libpib.a combine
 	@cd combine && $(AR) -x liblibScePiglet_stub.a
 	@cd combine && $(AR) -x libSceShaccCg_stub.a
