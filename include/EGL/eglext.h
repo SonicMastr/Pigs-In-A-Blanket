@@ -1364,20 +1364,65 @@ EGLAPI EGLuint64NV EGLAPIENTRY eglGetSystemTimeNV (void);
 
 #ifndef EGL_SCE_piglet_sync
 #define EGL_SCE_piglet_sync 1
+#define EGL_PIGLET_SYNC_SCENE_SCE 1
+#define EGL_SYNC_STATUS_SCE               0x30F1
+#define EGL_SIGNALED_SCE                  0x30F2
+#define EGL_UNSIGNALED_SCE                0x30F3
+#define EGL_TIMEOUT_EXPIRED_SCE           0x30F5
+#define EGL_CONDITION_SATISFIED_SCE       0x30F6
+#define EGL_SYNC_TYPE_SCE                 0x30F7
+#define EGL_SYNC_REUSABLE_SCE             0x30FA
 typedef void *EGLPigletSyncSCE;
+typedef khronos_utime_nanoseconds_t EGLTimeSCE;
 typedef EGLPigletSyncSCE (EGLAPIENTRYP PFNEGLPIGLETCREATESYNCSCEPROC) (EGLDisplay dpy, EGLenum type, EGLint *attrib_list);
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLPIGLETDESTROYSYNCSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync);
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLPIGLETSCENESYNCPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync);
-typedef EGLint (EGLAPIENTRYP PFNEGLPIGLETCLIENTWAITSYNCSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint flags, EGLTimeKHR timeout);
+typedef EGLint (EGLAPIENTRYP PFNEGLPIGLETCLIENTWAITSYNCSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint flags, EGLTimeSCE timeout);
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLPIGLETGETSYNCATTRIBSCEPROC) (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint attribute, EGLint *value);
 #ifdef EGL_EGLEXT_PROTOTYPES
 EGLAPI EGLPigletSyncSCE EGLAPIENTRY eglPigletCreateSyncSCE (EGLDisplay dpy, EGLenum type, EGLint *attrib_list);
 EGLAPI EGLBoolean EGLAPIENTRY eglPigletDestroySyncSCE(EGLDisplay dpy, EGLPigletSyncSCE sync);
 EGLAPI EGLBoolean EGLAPIENTRY eglPigletSceneSync(EGLDisplay dpy, EGLPigletSyncSCE sync);
-EGLAPI EGLint EGLAPIENTRY eglPigletClientWaitSyncSCE (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint flags, EGLTimeKHR timeout);
+EGLAPI EGLint EGLAPIENTRY eglPigletClientWaitSyncSCE (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint flags, EGLTimeSCE timeout);
 EGLAPI EGLBoolean EGLAPIENTRY eglPigletGetSyncAttribSCE (EGLDisplay dpy, EGLPigletSyncSCE sync, EGLint attribute, EGLint *value);
 #endif
 #endif /* EGL_SCE_piglet_sync */
+
+#ifndef EGL_SCE_piglet_vita_pre_swap_callback
+#define EGL_SCE_piglet_vita_pre_swap_callback 1
+typedef struct ScePigletPreSwapData
+{
+    SceGxmColorFormat colorFormat;
+    SceGxmColorSurfaceType surfaceType;
+    uint32_t width;
+    uint32_t height;
+    uint32_t strideInPixels;
+    void *colorSurfaceData;
+    void *depthSurfaceData;
+    void *stencilBufferData;
+    SceGxmSyncObject *displaySyncObject;
+} ScePigletPreSwapData;
+typedef void (EGLAPIENTRYP PFNEGLPIGLETVITASETPRESWAPCALLBACKSCEPROC) (void (*callback_function)(ScePigletPreSwapData *));
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI void EGLAPIENTRY eglPigletVitaSetPreSwapCallbackSCE (void (*callback_function)(ScePigletPreSwapData *));
+#endif
+#endif /* EGL_SCE_piglet_vita_pre_swap_callback */
+
+#ifndef EGL_SCE_piglet_vita_vsync_callback
+#define EGL_SCE_piglet_vita_vsync_callback 1
+typedef struct ScePigletVSyncData
+{
+    SceDisplayPixelFormat pixelFormat;
+    uint32_t width;
+    uint32_t height;
+    uint32_t pitch;
+    void *framebuffer;
+} ScePigletVSyncData;
+typedef void (EGLAPIENTRYP PFNEGLPIGLETVITASETVSYNCCALLBACKSCEPROC) (void (*callback_function)(ScePigletVSyncData *));
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI void EGLAPIENTRY eglPigletVitaSetVSyncCallbackSCE (void (*callback_function)(ScePigletVSyncData *));
+#endif
+#endif /* EGL_SCE_piglet_vita_vsync_callback */
 
 #ifndef EGL_TIZEN_image_native_buffer
 #define EGL_TIZEN_image_native_buffer 1

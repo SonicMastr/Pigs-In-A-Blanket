@@ -148,9 +148,20 @@ typedef khronos_uintptr_t  EGLNativeWindowType;
 
 #elif defined(__VITA__)
 
+#include <psp2/gxm.h>
+#include <psp2/display.h>
+
 typedef void *EGLNativeDisplayType;
 typedef void *EGLNativePixmapType;
-typedef int EGLNativeWindowType;
+typedef enum VitaEGLNativeWindow {
+    VITA_INVALID_WINDOW = 0,
+    VITA_WINDOW_960X544,
+    VITA_WINDOW_720X408,
+    VITA_WINDOW_640X368,
+    VITA_WINDOW_480X272,
+    VITA_WINDOW_1280X720,
+    VITA_WINDOW_1920X1080
+} EGLNativeWindowType;
 
 #elif defined(__Fuchsia__)
 

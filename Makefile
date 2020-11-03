@@ -39,3 +39,4 @@ install: lib$(LIB).a
 	@cd combine && $(AR) -qc ../libpib.a *.o
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
 	@cp lib$(LIB).a $(DESTDIR)$(PREFIX)/lib/
+	@echo Installed PIB!
