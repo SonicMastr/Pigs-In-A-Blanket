@@ -27,6 +27,13 @@
 #include "../include/hooks.h"
 #include "../include/debug.h"
 
+void glGetBooleanv_shaderCompilerPatch(unsigned int pname, unsigned char *data)
+{
+    TAI_CONTINUE(void, hookRef[1], pname, data);
+    if (pname == 0x8DFA)
+        *data = 1;
+}
+
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams)
 {
     if (*(int *)(textureUploadParams + 0xd0) != 0)
@@ -61,7 +68,7 @@ void _pglPlatformTextureUploadParams_patch(int textureUploadParams)
         }
     }
 
-    TAI_CONTINUE(void, hookRef[1], textureUploadParams);
+    TAI_CONTINUE(void, hookRef[2], textureUploadParams);
 }
 
 int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *attrib_list)
@@ -82,13 +89,13 @@ int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *at
             break;
     }
 
-    return TAI_CONTINUE(int, hookRef[2], dpy, config, win, attrib_list);
+    return TAI_CONTINUE(int, hookRef[3], dpy, config, win, attrib_list);
 }
 
 void *eglGetProcAddress_functionNamePatch(const char *procname)
 {
 
-    void *ret = TAI_CONTINUE(void*, hookRef[3], procname);
+    void *ret = TAI_CONTINUE(void*, hookRef[4], procname);
 
     if(ret)
         return ret; // Got an Extension function address. No need to do anything else.

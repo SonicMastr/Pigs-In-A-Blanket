@@ -40,15 +40,16 @@ void loadHooks(PibOptions options)
     taiGetModuleInfo("libScePiglet", &info);
     if (options & PIB_SHACCCG) {
         hook[0] = taiHookFunctionOffset(&hookRef[0], info.modid, 0, 0x32BB4, 1, pglPlatformShaderCompiler_CustomPatch);
-        LOG("ShaccCg Patch: 0x%08x\n", hook[0]);
+        hook[1] = taiHookFunctionExport(&hookRef[1], info.name, 0xB4FE1ABB, 0x919FBCB7, glGetBooleanv_shaderCompilerPatch);
+        LOG("ShaccCg Patch: 0x%08x\nEnabled Shader Compiler Response: 0x%08x\n", hook[0], hook[1]);
     }
-    hook[1] = taiHookFunctionOffset(&hookRef[1], info.modid, 0, 0x39770, 1, _pglPlatformTextureUploadParams_patch);
-    hook[2] = taiHookFunctionExport(&hookRef[2], info.name, 0xB4FE1ABB, 0x4B86317A, eglCreateWindowSurface_resolutionPatch);
-    LOG("Texture Upload Params Patch: 0x%08x\n", hook[1]);
-    LOG("Resolution Patch: 0x%08x\n", hook[2]);
+    hook[2] = taiHookFunctionOffset(&hookRef[2], info.modid, 0, 0x39770, 1, _pglPlatformTextureUploadParams_patch);
+    hook[3] = taiHookFunctionExport(&hookRef[3], info.name, 0xB4FE1ABB, 0x4B86317A, eglCreateWindowSurface_resolutionPatch);
+    LOG("Texture Upload Params Patch: 0x%08x\n", hook[2]);
+    LOG("Resolution Patch: 0x%08x\n", hook[3]);
     if (options & PIB_GET_PROC_ADDR_CORE) {
-        hook[3] = taiHookFunctionExport(&hookRef[3], info.name, 0xB4FE1ABB, 0x249A431A, eglGetProcAddress_functionNamePatch);
-        LOG("eglGetProcAddress Function Name Patch: 0x%08x\n", hook[3]);
+        hook[4] = taiHookFunctionExport(&hookRef[4], info.name, 0xB4FE1ABB, 0x249A431A, eglGetProcAddress_functionNamePatch);
+        LOG("eglGetProcAddress Function Name Patch: 0x%08x\n", hook[4]);
     }
 }
 
