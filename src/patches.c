@@ -23,9 +23,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <psp2/types.h>
+#include <psp2/display.h>
 #include "../include/patches.h"
 #include "../include/hooks.h"
 #include "../include/debug.h"
+
+static int swap_interval = 1;
 
 void glGetBooleanv_shaderCompilerPatch(unsigned int pname, unsigned char *data)
 {
@@ -109,4 +112,19 @@ void *eglGetProcAddress_functionNamePatch(const char *procname)
         return NULL;
 
     return function;
+}
+
+int pglDisplaySetSwapInterval_intervalPatch(void *display, int interval) 
+{
+    int ret = TAI_CONTINUE(int, hookRef[5], display, interval);
+
+    if (ret)
+        swap_interval = interval;
+
+    return ret;
+}
+
+int sceDisplayWaitVblankStart_intervalPatch()
+{
+    return sceDisplayWaitVblankStartMulti(swap_interval);
 }
