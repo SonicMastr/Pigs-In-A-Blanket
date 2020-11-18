@@ -51,6 +51,10 @@ void loadHooks(PibOptions options)
         hook[4] = taiHookFunctionExport(&hookRef[4], info.name, 0xB4FE1ABB, 0x249A431A, eglGetProcAddress_functionNamePatch);
         LOG("eglGetProcAddress Function Name Patch: 0x%08x\n", hook[4]);
     }
+    hook[5] = taiHookFunctionExport(&hookRef[5], info.name, 0xB4FE1ABB, 0x33A55EAB, eglGetConfigAttrib_intervalPatch);
+    hook[6] = taiHookFunctionOffset(&hookRef[6], info.modid, 0, 0x158F8, 1, pglDisplaySetSwapInterval_intervalPatch);
+    hook[7] = taiHookFunctionImport(&hookRef[7], info.name, 0x5ED8F994, 0x5795E898, sceDisplayWaitVblankStart_intervalPatch);
+    LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[5], hook[6]);
 }
 
 void releaseHooks(void)

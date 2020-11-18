@@ -28,4 +28,7 @@ void glGetBooleanv_shaderCompilerPatch(unsigned int pname, unsigned char *data);
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams);
 int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *attrib_list);
 void *eglGetProcAddress_functionNamePatch(const char *procname);
+unsigned int eglGetConfigAttrib_intervalPatch(void *display, void *config, int attrib, int *value);
+unsigned int pglDisplaySetSwapInterval_intervalPatch(void *display, int swap_interval);
+int sceDisplayWaitVblankStart_intervalPatch();
 #endif /* PATCHES_H_ */
