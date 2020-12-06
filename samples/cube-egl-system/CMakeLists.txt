@@ -30,11 +30,7 @@ target_link_libraries(${PROJECT_NAME}
   SceModulemgr_stub
   SceSysmodule_stub
   SceIofilemgr_stub
-  SceAppMgr_stub            # Needed for System Mode 
-  SceSharedFb_stub          # Needed for System Mode 
   SceGxm_stub
-  SceGxmInternalForVsh_stub # Needed for System Mode 
-  SceGxmInternal_stub       # Needed for System Mode 
   SceDisplay_stub
   SceLibc_stub
   SceLibm_stub

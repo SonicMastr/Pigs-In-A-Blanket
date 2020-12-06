@@ -14,7 +14,15 @@ If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_
 
 Piglet needs an SceLibc heap size of at least 2MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
 
-`liblibScePiglet_stub.a` (Yes, that's the name), `libSceShaccCg_stub.a`, and `libtaihen_stub.a` are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
+These stubs are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
+
+- liblibScePiglet_stub.a (Yes, that's the name)
+- libSceShaccCg_stub.a
+- libtaihen_stub.a
+- libSceGxmInternalForVsh_stub.a
+- libSceGxmInternal_stub.a
+- libSceSharedFb_stub.a
+- libSceAppMgr_stub.a
 
 ### Check the "Samples" folder for examples of how to use PIB to initialize OpenGLES 2.0 with EGL or GLFW.
 Yes. We have a GLFW3 port for the vita. You can built it here: https://github.com/SonicMastr/glfw-vita<br>Note: Button Mapping is not correct for anything but the Cross button. Hats and Analog Input are perfect. Also supports Touch.

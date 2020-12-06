@@ -28,10 +28,18 @@ install: lib$(LIB).a
 	@cp -r include/GLES2 $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/KHR $(DESTDIR)$(PREFIX)/include/
 	@mkdir -p combine
+	@cp $(PREFIX)/lib/libSceAppMgr_stub.a combine
+	@cp $(PREFIX)/lib/libSceSharedFb_stub.a combine
+	@cp $(PREFIX)/lib/libSceGxmInternalForVsh_stub.a combine
+	@cp $(PREFIX)/lib/libSceGxmInternal_stub.a combine
 	@cp $(PREFIX)/lib/liblibScePiglet_stub.a combine
 	@cp $(PREFIX)/lib/libSceShaccCg_stub.a combine
 	@cp $(PREFIX)/lib/libtaihen_stub.a combine
 	@cp libpib.a combine
+	@cd combine && $(AR) -x libSceAppMgr_stub.a
+	@cd combine && $(AR) -x libSceSharedFb_stub.a
+	@cd combine && $(AR) -x libSceGxmInternalForVsh_stub.a
+	@cd combine && $(AR) -x libSceGxmInternal_stub.a
 	@cd combine && $(AR) -x liblibScePiglet_stub.a
 	@cd combine && $(AR) -x libSceShaccCg_stub.a
 	@cd combine && $(AR) -x libtaihen_stub.a
