@@ -35,22 +35,22 @@
 static SceUID modID[4];
 static SceBool pibIsInit = SCE_FALSE;
 
-static int loadModules(PibOptions options)
+static PibError loadModules(PibOptions options)
 {
     if (!(options & PIB_NOSTDLIB)) {
         if (modID[3] = sceKernelLoadStartModule("vs0:sys/external/libfios2.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[3] < 0 && modID[3] != 0x8002D014 && modID[3] != 0x8002D013)
-            return -4;
+            return PIB_ERROR_FIOS2_FAILED;
         if (modID[2] = sceKernelLoadStartModule("vs0:sys/external/libc.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[2] < 0 && modID[2] != 0x8002D014 && modID[2] != 0x8002D013)
-            return -3;
+            return PIB_ERROR_LIBC_FAILED;
     }
     if (modID[1] = sceKernelLoadStartModule("ur0:data/external/libScePiglet.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[1] < 0)
-        return -2;
+        return PIB_ERROR_PIGLET_FAILED;
     if (options & PIB_SHACCCG) {
         if (modID[0] = sceKernelLoadStartModule("ur0:data/external/libshacccg.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[0] < 0)
-            return -1;
+            return PIB_ERROR_SHACCCG_FAILED;
         sceShaccCgSetMemAllocator(malloc, free);
     }
-    return 0;
+    return PIB_SUCCESS;
 }
 
 static void unloadModules(void)
@@ -74,13 +74,13 @@ static void getResolutionConfig()
 	sceIoClose(fd);
 }
 
-int pibInit(PibOptions options)
+PibError pibInit(PibOptions options)
 {
     if(pibIsInit) {
         LOG("PIB is already Initialized!\n");
-        return -5; // PIB already Initialized
+        return PIB_ERROR_ALREADY_INIT; // PIB already Initialized
     }
-    int ret = loadModules(options);
+    PibError ret = loadModules(options);
     if (ret) return ret;
 
     if (!(options & PIB_SYSTEM_MODE))
@@ -90,17 +90,17 @@ int pibInit(PibOptions options)
    
     loadHooks(options);
     pibIsInit = SCE_TRUE;
-    return 0;
+    return PIB_SUCCESS;
 }
 
-int pibTerm(void)
+PibError pibTerm(void)
 {
     if(!pibIsInit) {
         LOG("PIB is not Initialized!\n");
-        return -1; // PIB isn't Initialized
+        return PIB_ERROR_NOT_INIT; // PIB isn't Initialized
     }
     unloadModules();
     releaseHooks();
     pibIsInit = SCE_FALSE;
-    return 0;	
+    return PIB_SUCCESS;	
 }

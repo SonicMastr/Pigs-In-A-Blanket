@@ -26,8 +26,6 @@
 #include <psp2/gxm_internal.h>
 #include <psp2/appmgr.h>
 
-bool (*pglSceneManagerRecycle)(char bWaitInfiniteOnCompletion, uint bPurge);
-
 SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params);
 unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int *memory);
 void *pglPlatformSurfaceCreateWindow_detect(int a1, int a2, int a3, int a4, int *a5);

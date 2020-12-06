@@ -56,13 +56,11 @@ void loadHooks(PibOptions options)
     hook[7] = taiHookFunctionImport(&hookRef[7], modInfo.name, 0x5ED8F994, 0x5795E898, sceDisplayWaitVblankStart_intervalPatch);
     LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[5], hook[6]);
     if (options & PIB_SYSTEM_MODE) {
-        tai_module_info_t tai_info;
         uint8_t cbnz_opcode = 0xB9;
         uint8_t mem_mode_two = 0x2;
         taiInjectData(modInfo.modid, 0, 0x33219, &cbnz_opcode, sizeof(cbnz_opcode));
-        SceUID inject1 = taiInjectData(modInfo.modid, 0, 0x2D2C0, &mem_mode_two, sizeof(mem_mode_two)); // Patch pglVitaMemoryAlloc to always use MAIN memblock
-        SceUID inject2 = taiInjectData(modInfo.modid, 0, 0x2D1DC, &mem_mode_two, sizeof(mem_mode_two)); //
-        module_get_offset(tai_info.modid, 0, 0x1EDF2 | 1, &pglSceneManagerRecycle);
+        taiInjectData(modInfo.modid, 0, 0x2D2C0, &mem_mode_two, sizeof(mem_mode_two)); // Patch pglVitaMemoryAlloc to always use MAIN memblock
+        taiInjectData(modInfo.modid, 0, 0x2D1DC, &mem_mode_two, sizeof(mem_mode_two)); //
         hook[8] = taiHookFunctionImport(&hookRef[8], modInfo.name, 0xF76B66BD, 0xB0F1E4EC, sceGxmInitialize_patch);
         hook[9] = taiHookFunctionOffset(&hookRef[9], modInfo.modid, 0, 0x17d24, 1, pglMemoryAllocAlign_patch);
         hook[10] = taiHookFunctionOffset(&hookRef[10], modInfo.modid, 0, 0x33074, 1, pglPlatformSurfaceCreateWindow_detect);
@@ -71,7 +69,6 @@ void loadHooks(PibOptions options)
         hook[13] = taiHookFunctionOffset(&hookRef[13], modInfo.modid, 0, 0x33902, 1, pglPlatformSurfaceSwap_patch);
         hook[14] = taiHookFunctionOffset(&hookRef[14], modInfo.modid, 0, 0x337A6, 1, pglPlatformSurfaceDestroy_detect);
         hook[15] = taiHookFunctionImport(&hookRef[15], modInfo.name, 0xF76B66BD, 0x889AE88C, sceGxmSyncObjectDestroy_patch);
-        LOG("inject1: 0x%08x\ninject2: 0x%08X\n", inject1, inject2);
     }
 }
 

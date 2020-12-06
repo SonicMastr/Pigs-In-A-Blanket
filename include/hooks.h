@@ -23,7 +23,6 @@
 #define HOOKS_H_
 
 #include "../include/pib.h"
-#include "../include/taiutils.h"
 #include <taihen.h>
 
 #define NUM_HOOKS 16

@@ -29,15 +29,29 @@ extern "C" {
 #include <psp2common/types.h>
 
 /**
+ * @brief PIB Error Codes.
+ * 
+ */
+typedef enum _PibError {
+    PIB_ERROR_NOT_INIT = -6,    //!< PIB wasn't Initialized
+    PIB_ERROR_ALREADY_INIT,     //!< PIB is already Initialized
+    PIB_ERROR_FIOS2_FAILED,     //!< SceFios2 Module Failed to Start
+    PIB_ERROR_LIBC_FAILED,      //!< SceLibc Module Failed to Start
+    PIB_ERROR_PIGLET_FAILED,    //!< libScePiglet Module Failed to Start
+    PIB_ERROR_SHACCCG_FAILED,   //!< SceShaccCg Module Failed to Start
+    PIB_SUCCESS
+} PibError;
+
+/**
  * @brief Initialization options for PIB.
  * 
  */
 typedef enum _PibOptions {
-    PIB_NONE = 0, // Defaults
-    PIB_SHACCCG = 1, // Enable Runtime CG Shader Compiler
-    PIB_NOSTDLIB = 2, // Enable support for -nostdlib usage
-    PIB_GET_PROC_ADDR_CORE = 4, // Enable EGL 1.5-like support for getting core GL functions with eglGetProcAddress
-    PIB_SYSTEM_MODE = 8 // Enable use for System Applications
+    PIB_NONE = 0,               //!< Defaults
+    PIB_SHACCCG = 1,            //!< Enable Runtime CG Shader Compiler
+    PIB_NOSTDLIB = 2,           //!< Enable support for -nostdlib usage
+    PIB_GET_PROC_ADDR_CORE = 4, //!< Enable EGL 1.5-like support for getting core GL functions with eglGetProcAddress
+    PIB_SYSTEM_MODE = 8         //!< Enable use for System Applications
 } PibOptions;
 
 /**
@@ -47,19 +61,18 @@ typedef enum _PibOptions {
  * @param[in] pibOptions 
  *  Intialization options for PIB
  * 
- * @return 0 on success, -1 if libshacccg.suprx is not present (ShaccCgEnabled option only), -2 if libScePiglet.suprx is not present,
- *  -3 if libc could not load (noStdLib option only), -4 if libfios2 could not load (noStdLib option only), -5 if already initialized
+ * @return PibError Code
  * 
  */
-int pibInit(PibOptions pibOptions);
+PibError pibInit(PibOptions pibOptions);
 
 /**
  * @brief Terminates and unloads Piglet and optionally SceShaccCg if specified by pibInit
  * 
- * @return 0 on success, -1 if PIB is not initialized
+ * @return PibError Code
  * 
  */
-int pibTerm(void);
+PibError pibTerm(void);
 
 #ifdef __cplusplus
 }

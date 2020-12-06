@@ -52,8 +52,6 @@ typedef struct SceSharedFbInfo { // size is 0x58
 	int unk_54;
 } SceSharedFbInfo;
 
-bool (*pglSceneManagerRecycle)(char bWaitInfiniteOnCompletion, uint bPurge);
-
 static SceSharedFbInfo info;
 static SceUID shfb_id;
 static void *displayBufferData[2];
@@ -119,15 +117,14 @@ SceGxmErrorCode sceGxmSyncObjectCreate_patch(SceGxmSyncObject **syncObject)
 		SceGxmErrorCode ret = sceGxmSyncObjectOpenShared(bufferDataIndex, syncObject);
 		return ret;
 	}
-	SceGxmErrorCode ret = TAI_CONTINUE(SceGxmErrorCode, hookRef[11], syncObject);
+	TAI_CONTINUE(SceGxmErrorCode, hookRef[11], syncObject);
 	return 0;
 }
 
 int pglPlatformContextBeginFrame_patch(int context, int framebuffer)
 {
 	if(!*(int *)(context + 0x12bf0) && !framebegun) { // GL FrameBuffer Object ID
-		int ret = sceSharedFbBegin(shfb_id, &info);
-		LOG("Begin SharedFB(): 0x%08X\nBuffer: %d\n", ret, info.curbuf);
+		sceSharedFbBegin(shfb_id, &info);
 		info.owner = 1;
 		framebegun = 1;
 	}
@@ -158,7 +155,6 @@ int pglPlatformSurfaceSwap_patch(int surface) // Completely rewritten for System
 	var4 = *(int *)(bufferIndexNew + 0x98);
 	*(int *)(surface + 0x6c) = framebufferAddress;
 	*(int *)(surface + 0x70) = var4;
-	pglSceneManagerRecycle(0,0);
 	LOG("Buffer to write: %d\n", *(int *)(surface + 0x7c));
 	framebegun = 0; // Reset drawing status
 	return 1;
