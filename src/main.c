@@ -33,6 +33,7 @@
 #include <taihen.h>
 
 static SceUID modID[4];
+static SceBool pibIsInit = SCE_FALSE;
 
 static int loadModules(PibOptions options)
 {
@@ -75,18 +76,31 @@ static void getResolutionConfig()
 
 int pibInit(PibOptions options)
 {
+    if(pibIsInit) {
+        LOG("PIB is already Initialized!\n");
+        return -5; // PIB already Initialized
+    }
     int ret = loadModules(options);
     if (ret) return ret;
 
-    getResolutionConfig();
+    if (!(options & PIB_SYSTEM_MODE))
+        getResolutionConfig();
+    else
+        customResolutionMode = 7; // Custom System Mode Resolution Configuration 
    
     loadHooks(options);
+    pibIsInit = SCE_TRUE;
     return 0;
 }
 
 int pibTerm(void)
 {
+    if(!pibIsInit) {
+        LOG("PIB is not Initialized!\n");
+        return -1; // PIB isn't Initialized
+    }
     unloadModules();
     releaseHooks();
+    pibIsInit = SCE_FALSE;
     return 0;	
 }

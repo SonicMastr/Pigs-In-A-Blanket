@@ -19,21 +19,22 @@
  * 
  ****************************************************************************/
 
-#ifndef HOOKS_H_
-#define HOOKS_H_
+#ifndef SYSMODEPATCH_H_
+#define SYSMODEPATCH_H_
 
-#include "../include/pib.h"
-#include "../include/taiutils.h"
-#include <taihen.h>
+#include <psp2/gxm.h>
+#include <psp2/gxm_internal.h>
+#include <psp2/appmgr.h>
 
-#define NUM_HOOKS 16
+bool (*pglSceneManagerRecycle)(char bWaitInfiniteOnCompletion, uint bPurge);
 
-extern tai_hook_ref_t hookRef[NUM_HOOKS];
-extern SceUID hook[NUM_HOOKS];
-extern int customResolutionMode;
-extern tai_module_info_t modInfo;
+SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params);
+unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int *memory);
+void *pglPlatformSurfaceCreateWindow_detect(int a1, int a2, int a3, int a4, int *a5);
+SceGxmErrorCode sceGxmSyncObjectCreate_patch(SceGxmSyncObject **syncObject);
+int pglPlatformContextBeginFrame_patch(int context, int framebuffer);
+int pglPlatformSurfaceSwap_patch(int surface);
+void pglPlatformSurfaceDestroy_detect(int surface);
+SceGxmErrorCode sceGxmSyncObjectDestroy_patch(SceGxmSyncObject *syncObject);
 
-void loadHooks(PibOptions options);
-void releaseHooks(void);
-
-#endif /* HOOKS_H_ */
+#endif /* SYSMODEPATCH_H_ */

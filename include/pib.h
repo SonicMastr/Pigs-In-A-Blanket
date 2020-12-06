@@ -48,7 +48,7 @@ typedef enum _PibOptions {
  *  Intialization options for PIB
  * 
  * @return 0 on success, -1 if libshacccg.suprx is not present (ShaccCgEnabled option only), -2 if libScePiglet.suprx is not present,
- *  -3 if libc could not load (noStdLib option only), -4 if libfios2 could not load (noStdLib option only)
+ *  -3 if libc could not load (noStdLib option only), -4 if libfios2 could not load (noStdLib option only), -5 if already initialized
  * 
  */
 int pibInit(PibOptions pibOptions);
@@ -56,7 +56,7 @@ int pibInit(PibOptions pibOptions);
 /**
  * @brief Terminates and unloads Piglet and optionally SceShaccCg if specified by pibInit
  * 
- * @return int 
+ * @return 0 on success, -1 if PIB is not initialized
  * 
  */
 int pibTerm(void);

@@ -503,8 +503,8 @@ int initEGL(void)
         EGL_GREEN_SIZE, 8,                          //
         EGL_BLUE_SIZE, 8,                           //
         EGL_ALPHA_SIZE, 8,                          //
-        EGL_DEPTH_SIZE, 32,                         // Depth is either 32 or 0 (16 does work as well, but has the same effect as using 32)
-        EGL_STENCIL_SIZE, 8,                        // Stencil Size is either 8 or 0
+        EGL_DEPTH_SIZE, 32,                          // Depth is either 32 or 0 (16 does work as well, but has the same effect as using 32)
+        EGL_STENCIL_SIZE, 0,                        // Stencil Size is either 8 or 0
         EGL_SURFACE_TYPE, 5,                        // This is ALWAYS 5
         EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,    // Always EGL_OPENGL_ES2_BIT or 0x4
         EGL_NONE};
@@ -518,7 +518,7 @@ int initEGL(void)
 
     eglChooseConfig(display, configAttribs, &config, 1, &numConfigs);
 
-    surface = eglCreateWindowSurface(display, config, VITA_WINDOW_960X544, NULL);  // You can choose your display resoltion, up to 1080p on the PSTV (Vita requires SharpScale)
+    surface = eglCreateWindowSurface(display, config, VITA_WINDOW_960X544, NULL);  // In System Mode, resolution is locked to 960x544. Changing this value will not change resolution.
 
     EGLContext context = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttribs);
 
@@ -541,7 +541,7 @@ int main(unsigned int args, void *argp)
 *   Always initialize PIB before callling any EGL/GLES functions 
 *   Enable the ShaccCg Shader Compiler and Enabled -nostdlib support (No need if you don't use -nostdlib)
 */
-    pibInit(PIB_SHACCCG | PIB_NOSTDLIB);
+    pibInit(PIB_SHACCCG | PIB_NOSTDLIB | PIB_SYSTEM_MODE); // Make sure to add System Mode Flag
 
     initEGL();
 

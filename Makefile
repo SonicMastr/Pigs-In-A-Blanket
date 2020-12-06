@@ -1,5 +1,5 @@
 LIB  	= pib
-OBJS    = src/main.o src/hooks.o src/shacccgpatch.o src/patches.o src/sha1.o
+OBJS    = src/main.o src/hooks.o src/shacccgpatch.o src/patches.o src/sha1.o src/sysmodepatch.o src/taiutils.o
 INCLUDE = include
 
 PREFIX  ?= ${DOLCESDK}/arm-dolce-eabi

@@ -10,9 +10,9 @@ Note when building your projects:
 
 **ALWAYS COMPILE YOUR PROJECTS WITH UNSAFE**. Doing otherwise will result in PIB failing.
 
-If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 3194304")```<br>If using Makefile, make sure to specify ```dolce-elf-create -h 3194304```
+If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 3194304")```<br>If using Makefile, make sure to specify ```dolce-elf-create -h 2097152```
 
-Piglet needs an SceLibc heap size of at least 3MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
+Piglet needs an SceLibc heap size of at least 2MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
 
 `liblibScePiglet_stub.a` (Yes, that's the name), `libSceShaccCg_stub.a`, and `libtaihen_stub.a` are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
 

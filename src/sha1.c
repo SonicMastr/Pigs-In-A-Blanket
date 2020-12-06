@@ -293,4 +293,3 @@ void SHA1(
     SHA1Final((unsigned char *)hash_out, &ctx);
     hash_out[20] = '\0';
 }
-

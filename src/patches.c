@@ -90,6 +90,11 @@ int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *at
             *(int16_t *)(dpy + 0x28) = 1088;
             *(int16_t *)(dpy + 0x2A) = 1920;
             break;
+        case 7:
+            *(int16_t *)(dpy + 0x26) = 960;
+            *(int16_t *)(dpy + 0x28) = 544;
+            *(int16_t *)(dpy + 0x2A) = 960;
+            break;
     }
 
     return TAI_CONTINUE(int, hookRef[3], dpy, config, win, attrib_list);
