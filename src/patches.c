@@ -179,7 +179,7 @@ SceGxmErrorCode sceGxmCreateRenderTarget_msaaPatch(const SceGxmRenderTargetParam
 	renderTargetParams.flags = 0;
 	renderTargetParams.width = params->width;
 	renderTargetParams.height = params->height;
-    renderTargetParams.multisampleMode = SCE_GXM_MULTISAMPLE_4X;
+    renderTargetParams.multisampleMode = isCreatingSurface ? SCE_GXM_MULTISAMPLE_4X : SCE_GXM_MULTISAMPLE_NONE;
 	renderTargetParams.scenesPerFrame = 1;
 	renderTargetParams.multisampleLocations = 0;
 	renderTargetParams.driverMemBlock = -1;
@@ -193,6 +193,19 @@ SceGxmErrorCode sceGxmDepthStencilSurfaceInit_msaaPatch(SceGxmDepthStencilSurfac
                                                             void *depthData,
                                                             void *stencilData)
 {
-    strideInSamples *= 2;
+    if (isCreatingSurface)
+        strideInSamples *= 2;
     return TAI_CONTINUE(SceGxmErrorCode, hookRef[18], surface, depthStencilFormat, surfaceType, strideInSamples, depthData, stencilData);
+}
+
+SceGxmErrorCode sceGxmShaderPatcherCreateFragmentProgram_msaaPatch(SceGxmShaderPatcher *shaderPatcher,
+                                                                    SceGxmShaderPatcherId programId,
+                                                                    SceGxmOutputRegisterFormat outputFormat,
+                                                                    SceGxmMultisampleMode multisampleMode,
+                                                                    const SceGxmBlendInfo *blendInfo,
+                                                                    const SceGxmProgram *vertexProgram,
+                                                                    SceGxmFragmentProgram **fragmentProgram)
+{
+    multisampleMode = SCE_GXM_MULTISAMPLE_4X;
+    return TAI_CONTINUE(SceGxmErrorCode, hookRef[19], shaderPatcher, programId, outputFormat, multisampleMode, blendInfo, vertexProgram, fragmentProgram);
 }

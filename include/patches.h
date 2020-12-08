@@ -47,4 +47,11 @@ SceGxmErrorCode sceGxmDepthStencilSurfaceInit_msaaPatch(SceGxmDepthStencilSurfac
                                                             uint32_t strideInSamples,
                                                             void *depthData,
                                                             void *stencilData);
+SceGxmErrorCode sceGxmShaderPatcherCreateFragmentProgram_msaaPatch(SceGxmShaderPatcher *shaderPatcher,
+                                                                    SceGxmShaderPatcherId programId,
+                                                                    SceGxmOutputRegisterFormat outputFormat,
+                                                                    SceGxmMultisampleMode multisampleMode,
+                                                                    const SceGxmBlendInfo *blendInfo,
+                                                                    const SceGxmProgram *vertexProgram,
+                                                                    SceGxmFragmentProgram **fragmentProgram);
 #endif /* PATCHES_H_ */

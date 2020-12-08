@@ -56,9 +56,10 @@ void loadHooks(PibOptions options)
     hook[6] = taiHookFunctionOffset(&hookRef[6], modInfo.modid, 0, 0x158F8, 1, pglDisplaySetSwapInterval_intervalPatch);
     hook[7] = taiHookFunctionImport(&hookRef[7], modInfo.name, 0x5ED8F994, 0x5795E898, sceDisplayWaitVblankStart_intervalPatch);
     LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[5], hook[6]);
-    if ((options & PIB_SYSTEM_MODE) || (options & PIB_ENABLE_MSAA))
+    if ((options & PIB_SYSTEM_MODE) || (options & PIB_ENABLE_MSAA)) {
         hook[8] = taiHookFunctionOffset(&hookRef[8], modInfo.modid, 0, 0x17d24, 1, pglMemoryAllocAlign_patch);
-        LOG("pglMemoryAllocAlign Patch: 0x%08x\n", hook[8]);
+        hook[10] = taiHookFunctionOffset(&hookRef[10], modInfo.modid, 0, 0x33074, 1, pglPlatformSurfaceCreateWindow_detect);
+    }
     if (options & PIB_SYSTEM_MODE) {
         systemMode = 1;
         uint8_t cbnz_opcode = 0xB9;
@@ -67,7 +68,6 @@ void loadHooks(PibOptions options)
         taiInjectData(modInfo.modid, 0, 0x2D2C0, &mem_mode_two, sizeof(mem_mode_two)); // Patch pglVitaMemoryAlloc to always use MAIN memblock
         taiInjectData(modInfo.modid, 0, 0x2D1DC, &mem_mode_two, sizeof(mem_mode_two)); //
         hook[9] = taiHookFunctionImport(&hookRef[9], modInfo.name, 0xF76B66BD, 0xB0F1E4EC, sceGxmInitialize_patch);
-        hook[10] = taiHookFunctionOffset(&hookRef[10], modInfo.modid, 0, 0x33074, 1, pglPlatformSurfaceCreateWindow_detect);
         hook[11] = taiHookFunctionImport(&hookRef[11], modInfo.name, 0xF76B66BD, 0x6A6013E1, sceGxmSyncObjectCreate_patch);
         hook[12] = taiHookFunctionOffset(&hookRef[12], modInfo.modid, 0, 0x2A85A, 1, pglPlatformContextBeginFrame_patch);
         hook[13] = taiHookFunctionOffset(&hookRef[13], modInfo.modid, 0, 0x33902, 1, pglPlatformSurfaceSwap_patch);
@@ -77,7 +77,8 @@ void loadHooks(PibOptions options)
     if (options & PIB_ENABLE_MSAA) {
         hook[16] = taiHookFunctionImport(&hookRef[16], modInfo.name, 0xF76B66BD, 0xED0F6E25, sceGxmColorSurfaceInit_msaaPatch);
         hook[17] = taiHookFunctionImport(&hookRef[17], modInfo.name, 0xF76B66BD, 0x207AF96B, sceGxmCreateRenderTarget_msaaPatch);
-        hook[18] = taiHookFunctionImport(&hookRef[18], modInfo.name, 0xF76B66BD, 0xCA9D41D1, sceGxmCreateRenderTarget_msaaPatch);
+        hook[18] = taiHookFunctionImport(&hookRef[18], modInfo.name, 0xF76B66BD, 0xCA9D41D1, sceGxmDepthStencilSurfaceInit_msaaPatch);
+        hook[19] = taiHookFunctionImport(&hookRef[19], modInfo.name, 0xF76B66BD, 0x4ED2E49D, sceGxmShaderPatcherCreateFragmentProgram_msaaPatch);
         LOG("MSAA ENABLED!\n");
     }
 }

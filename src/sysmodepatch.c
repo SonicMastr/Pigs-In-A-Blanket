@@ -55,8 +55,9 @@ typedef struct SceSharedFbInfo { // size is 0x58
 static SceSharedFbInfo info;
 static SceUID shfb_id;
 static void *displayBufferData[2];
-static int isCreatingSurface, isDestroyingSurface, currentContext, framebegun = 0;
+static int isDestroyingSurface, currentContext, framebegun = 0;
 static unsigned int bufferDataIndex;
+int isCreatingSurface;
 
 SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params)
 {
@@ -96,7 +97,7 @@ unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int
 		memory[0] = displayBufferData[bufferDataIndex];
 		return 0;
 	}
-	if (!systemMode && memoryType == 5)
+	if (!systemMode && memoryType == 5 && isCreatingSurface)
 	{
 		size *= 4; // For MSAA
 	}
