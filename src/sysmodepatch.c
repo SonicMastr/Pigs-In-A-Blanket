@@ -97,7 +97,7 @@ unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int
 		memory[0] = displayBufferData[bufferDataIndex];
 		return 0;
 	}
-	if (!systemMode && memoryType == 5 && isCreatingSurface)
+	if (msaaEnabled && memoryType == 5 && isCreatingSurface)
 	{
 		size *= 4; // For MSAA
 	}

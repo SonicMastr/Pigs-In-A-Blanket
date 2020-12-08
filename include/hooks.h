@@ -32,6 +32,7 @@ extern SceUID hook[NUM_HOOKS];
 extern int customResolutionMode;
 extern tai_module_info_t modInfo;
 extern int systemMode;
+extern int msaaEnabled;
 extern int isCreatingSurface;
 
 void loadHooks(PibOptions options);

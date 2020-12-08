@@ -33,7 +33,7 @@ tai_hook_ref_t hookRef[NUM_HOOKS];
 SceUID hook[NUM_HOOKS];
 int customResolutionMode;
 tai_module_info_t modInfo;
-int systemMode = 0;
+int systemMode, msaaEnabled = 0;
 
 void loadHooks(PibOptions options)
 {
@@ -75,6 +75,7 @@ void loadHooks(PibOptions options)
         hook[15] = taiHookFunctionImport(&hookRef[15], modInfo.name, 0xF76B66BD, 0x889AE88C, sceGxmSyncObjectDestroy_patch);
     }
     if (options & PIB_ENABLE_MSAA) {
+        msaaEnabled = 1;
         hook[16] = taiHookFunctionImport(&hookRef[16], modInfo.name, 0xF76B66BD, 0xED0F6E25, sceGxmColorSurfaceInit_msaaPatch);
         hook[17] = taiHookFunctionImport(&hookRef[17], modInfo.name, 0xF76B66BD, 0x207AF96B, sceGxmCreateRenderTarget_msaaPatch);
         hook[18] = taiHookFunctionImport(&hookRef[18], modInfo.name, 0xF76B66BD, 0xCA9D41D1, sceGxmDepthStencilSurfaceInit_msaaPatch);
