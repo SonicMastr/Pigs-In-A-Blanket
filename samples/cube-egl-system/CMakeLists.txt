@@ -40,7 +40,7 @@ set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 2097152")
 
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/boot_param.bin
-  COMMAND dolce-make-bootparam app_memsize 0x19000 attribute 0x02 ${CMAKE_CURRENT_BINARY_DIR}/boot_param.bin # 0x19000 = 100MB memsize
+  COMMAND dolce-make-bootparam app_memsize 0x8000 attribute 0x02 ${CMAKE_CURRENT_BINARY_DIR}/boot_param.bin # 0x8000 = 32MB(32768kb)memsize
 )
 
 dolce_create_self(eboot.bin ${PROJECT_NAME} UNSAFE BOOT_PARAM ${CMAKE_CURRENT_BINARY_DIR}/boot_param.bin)

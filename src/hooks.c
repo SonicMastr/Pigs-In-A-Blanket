@@ -33,6 +33,7 @@ tai_hook_ref_t hookRef[NUM_HOOKS];
 SceUID hook[NUM_HOOKS];
 int customResolutionMode;
 tai_module_info_t modInfo;
+int systemMode = 0;
 
 void loadHooks(PibOptions options)
 {
@@ -55,20 +56,29 @@ void loadHooks(PibOptions options)
     hook[6] = taiHookFunctionOffset(&hookRef[6], modInfo.modid, 0, 0x158F8, 1, pglDisplaySetSwapInterval_intervalPatch);
     hook[7] = taiHookFunctionImport(&hookRef[7], modInfo.name, 0x5ED8F994, 0x5795E898, sceDisplayWaitVblankStart_intervalPatch);
     LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[5], hook[6]);
+    if ((options & PIB_SYSTEM_MODE) || (options & PIB_ENABLE_MSAA))
+        hook[8] = taiHookFunctionOffset(&hookRef[8], modInfo.modid, 0, 0x17d24, 1, pglMemoryAllocAlign_patch);
+        LOG("pglMemoryAllocAlign Patch: 0x%08x\n", hook[8]);
     if (options & PIB_SYSTEM_MODE) {
+        systemMode = 1;
         uint8_t cbnz_opcode = 0xB9;
         uint8_t mem_mode_two = 0x2;
         taiInjectData(modInfo.modid, 0, 0x33219, &cbnz_opcode, sizeof(cbnz_opcode));
         taiInjectData(modInfo.modid, 0, 0x2D2C0, &mem_mode_two, sizeof(mem_mode_two)); // Patch pglVitaMemoryAlloc to always use MAIN memblock
         taiInjectData(modInfo.modid, 0, 0x2D1DC, &mem_mode_two, sizeof(mem_mode_two)); //
-        hook[8] = taiHookFunctionImport(&hookRef[8], modInfo.name, 0xF76B66BD, 0xB0F1E4EC, sceGxmInitialize_patch);
-        hook[9] = taiHookFunctionOffset(&hookRef[9], modInfo.modid, 0, 0x17d24, 1, pglMemoryAllocAlign_patch);
+        hook[9] = taiHookFunctionImport(&hookRef[9], modInfo.name, 0xF76B66BD, 0xB0F1E4EC, sceGxmInitialize_patch);
         hook[10] = taiHookFunctionOffset(&hookRef[10], modInfo.modid, 0, 0x33074, 1, pglPlatformSurfaceCreateWindow_detect);
         hook[11] = taiHookFunctionImport(&hookRef[11], modInfo.name, 0xF76B66BD, 0x6A6013E1, sceGxmSyncObjectCreate_patch);
         hook[12] = taiHookFunctionOffset(&hookRef[12], modInfo.modid, 0, 0x2A85A, 1, pglPlatformContextBeginFrame_patch);
         hook[13] = taiHookFunctionOffset(&hookRef[13], modInfo.modid, 0, 0x33902, 1, pglPlatformSurfaceSwap_patch);
         hook[14] = taiHookFunctionOffset(&hookRef[14], modInfo.modid, 0, 0x337A6, 1, pglPlatformSurfaceDestroy_detect);
         hook[15] = taiHookFunctionImport(&hookRef[15], modInfo.name, 0xF76B66BD, 0x889AE88C, sceGxmSyncObjectDestroy_patch);
+    }
+    if (options & PIB_ENABLE_MSAA) {
+        hook[16] = taiHookFunctionImport(&hookRef[16], modInfo.name, 0xF76B66BD, 0xED0F6E25, sceGxmColorSurfaceInit_msaaPatch);
+        hook[17] = taiHookFunctionImport(&hookRef[17], modInfo.name, 0xF76B66BD, 0x207AF96B, sceGxmCreateRenderTarget_msaaPatch);
+        hook[18] = taiHookFunctionImport(&hookRef[18], modInfo.name, 0xF76B66BD, 0xCA9D41D1, sceGxmCreateRenderTarget_msaaPatch);
+        LOG("MSAA ENABLED!\n");
     }
 }
 

@@ -55,9 +55,8 @@ typedef struct SceSharedFbInfo { // size is 0x58
 static SceSharedFbInfo info;
 static SceUID shfb_id;
 static void *displayBufferData[2];
-static int isCreatingSurface, isDestroyingSurface, framebegun = 0;
+static int isCreatingSurface, isDestroyingSurface, currentContext, framebegun = 0;
 static unsigned int bufferDataIndex;
-static int currentContext;
 
 SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params)
 {
@@ -92,12 +91,16 @@ SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params)
 
 unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int *memory)
 {
-	if (memoryType == 4 && isCreatingSurface) // ColorSurface/Framebuffer Allocation. We want to skip this and replace with SharedFb Framebuffer
+	if (systemMode && memoryType == 4 && isCreatingSurface) // ColorSurface/Framebuffer Allocation. We want to skip this and replace with SharedFb Framebuffer
 	{
 		memory[0] = displayBufferData[bufferDataIndex];
 		return 0;
 	}
-	return TAI_CONTINUE(unsigned int, hookRef[9], memoryType, size, unused, memory);
+	if (!systemMode && memoryType == 5)
+	{
+		size *= 4; // For MSAA
+	}
+	return TAI_CONTINUE(unsigned int, hookRef[8], memoryType, size, unused, memory);
 }
 
 void *pglPlatformSurfaceCreateWindow_detect(int a1, int a2, int a3, int a4, int *a5)

@@ -1,7 +1,8 @@
 # Pigs In A Blanket | OpenGL ES 2.0 on the PS Vita by CBPS
 #### A Piglet/ShaccCg Wrapper Library for OpenGL ES 2.0 Support on the Vita
+#### Now with System App and MSAAx4 Support!
 ---
-##### Compiling
+### Compiling
 - Install [DolceSDK](https://github.com/DolceSDK/doc) (Has not been tested on VitaSDK as of yet)
 - Run ```make -j4 install```
 - Link libpib.a in your projects
@@ -10,7 +11,7 @@ Note when building your projects:
 
 **ALWAYS COMPILE YOUR PROJECTS WITH UNSAFE**. Doing otherwise will result in PIB failing.
 
-If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 3194304")```<br>If using Makefile, make sure to specify ```dolce-elf-create -h 2097152```
+If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 2097152")```<br>If using Makefile, make sure to specify ```dolce-elf-create -h 2097152```
 
 Piglet needs an SceLibc heap size of at least 2MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
 

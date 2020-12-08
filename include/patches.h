@@ -30,5 +30,21 @@ int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *at
 void *eglGetProcAddress_functionNamePatch(const char *procname);
 unsigned int eglGetConfigAttrib_intervalPatch(void *display, void *config, int attrib, int *value);
 unsigned int pglDisplaySetSwapInterval_intervalPatch(void *display, int swap_interval);
-int sceDisplayWaitVblankStart_intervalPatch();
+int sceDisplayWaitVblankStart_intervalPatch(void);
+SceGxmErrorCode sceGxmColorSurfaceInit_msaaPatch(SceGxmColorSurface *surface,
+                                                    SceGxmColorFormat colorFormat,
+                                                    SceGxmColorSurfaceType surfaceType,
+                                                    SceGxmColorSurfaceScaleMode scaleMode,
+                                                    SceGxmOutputRegisterSize outputRegisterSize,
+                                                    uint32_t width,
+                                                    uint32_t height,
+                                                    uint32_t strideInPixels,
+                                                    void *data);
+SceGxmErrorCode sceGxmCreateRenderTarget_msaaPatch(const SceGxmRenderTargetParams *params, SceGxmRenderTarget **renderTarget);
+SceGxmErrorCode sceGxmDepthStencilSurfaceInit_msaaPatch(SceGxmDepthStencilSurface *surface,
+                                                            SceGxmDepthStencilFormat depthStencilFormat,
+                                                            SceGxmDepthStencilSurfaceType surfaceType,
+                                                            uint32_t strideInSamples,
+                                                            void *depthData,
+                                                            void *stencilData);
 #endif /* PATCHES_H_ */

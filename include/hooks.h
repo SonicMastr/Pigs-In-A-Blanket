@@ -25,12 +25,13 @@
 #include "../include/pib.h"
 #include <taihen.h>
 
-#define NUM_HOOKS 16
+#define NUM_HOOKS 19
 
 extern tai_hook_ref_t hookRef[NUM_HOOKS];
 extern SceUID hook[NUM_HOOKS];
 extern int customResolutionMode;
 extern tai_module_info_t modInfo;
+extern int systemMode;
 
 void loadHooks(PibOptions options);
 void releaseHooks(void);

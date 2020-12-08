@@ -44,7 +44,7 @@ target_link_libraries(${PROJECT_NAME}
   m
 )
 
-set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 4194304")
+set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 2097152")
 
 dolce_create_self(eboot.bin ${PROJECT_NAME} UNSAFE)
 

@@ -541,7 +541,7 @@ int main(unsigned int args, void *argp)
 *   Always initialize PIB before callling any EGL/GLES functions 
 *   Enable the ShaccCg Shader Compiler and Enabled -nostdlib support (No need if you don't use -nostdlib)
 */
-    pibInit(PIB_SHACCCG | PIB_NOSTDLIB);
+    pibInit(PIB_SHACCCG | PIB_NOSTDLIB | PIB_ENABLE_MSAA); // MSAA X4 Support
 
     initEGL();
 
