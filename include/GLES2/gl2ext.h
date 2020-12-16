@@ -3906,7 +3906,7 @@ GL_APICALL void GL_APIENTRY glEndTilingQCOM (GLbitfield preserveMask);
 #ifndef GL_SCE_piglet_shader_binary
 #define GL_SCE_piglet_shader_binary 1
 #define GL_PIGLET_SHADER_BINARY_SCE    0x9270
-typedef void (GL_APIENTRYP PFNGLPIGLETGETPROGRAMBINARYSCEPROC) (GLuint shader, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary);
+typedef void (GL_APIENTRYP PFNGLPIGLETGETSHADERBINARYSCEPROC) (GLuint shader, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glPigletGetShaderBinarySCE (GLuint shader, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary);
 #endif
