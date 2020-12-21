@@ -1,3 +1,5 @@
+[![Development Time](https://wakatime.com/badge/github/SonicMastr/Pigs-In-A-Blanket.svg)](https://wakatime.com/badge/github/SonicMastr/Pigs-In-A-Blanket)
+
 # Pigs In A Blanket | OpenGL ES 2.0 on the PS Vita by CBPS
 #### A Piglet/ShaccCg Wrapper Library for OpenGL ES 2.0 Support on the Vita
 #### Now with System App and Experimental MSAAx4 Support!
