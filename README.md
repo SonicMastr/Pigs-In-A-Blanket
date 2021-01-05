@@ -28,7 +28,7 @@ These stubs are all linked automatically as they are combined with PIB after bei
 - libSceAppMgr_stub.a
 
 ### Check the "Samples" folder for examples of how to use PIB to initialize OpenGLES 2.0 with EGL or GLFW.
-Yes. We have a GLFW3 port for the vita. You can built it here: https://github.com/SonicMastr/glfw-vita<br>Note: Button Mapping is not correct for anything but the Cross button. Hats and Analog Input are perfect. Also supports Touch.
+Yes. We have a GLFW3 port for the vita. You can use it by simply including it in your project as normal or build it here: https://github.com/SonicMastr/glfw-vita<br>Note: Button mapping is perfect and there's full touchscreen support.
 
 To install Piglet on your Vita, just use the [Pigs in a Blanket Configuration Tool](https://github.com/SonicMastr/PIB-Configuration-Tool)
 
