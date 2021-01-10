@@ -20,11 +20,9 @@ AR      = arm-$(SDKPREFIX)-eabi-ar
 CFLAGS += -Wl,-q -Wall -Wno-incompatible-pointer-types -Wno-pointer-sign -O3 -nostartfiles -nostdlib -DVITA -D__VITA__
 ASFLAGS = $(CFLAGS)
 
-# all dependencies are baked into the lib; they differ slightly between vitasdk and dolcesdk
+# all dependencies except libSceGxm are baked into the lib; they differ slightly between vitasdk and dolcesdk
 COMBINELIST := liblibScePiglet_stub.a libtaihen_stub.a libSceShaccCg_stub.a libSceAppMgr_stub.a
-ifeq ($(USE_VITASDK),1)
-	COMBINELIST += libSceGxm_stub.a
-else
+ifeq ($(USE_VITASDK),0)
 	COMBINELIST += libSceSharedFb_stub.a libSceGxmInternalForVsh_stub.a libSceGxmInternal_stub.a
 endif
 
