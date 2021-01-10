@@ -24,6 +24,8 @@
 
 #include <psp2/gxm.h>
 
+void SHA1(char *hash_out, const char *str, int len);
+
 void glGetBooleanv_shaderCompilerPatch(unsigned int pname, unsigned char *data);
 void _pglPlatformTextureUploadParams_patch(int textureUploadParams);
 int eglCreateWindowSurface_resolutionPatch(int dpy, int config, int win, int *attrib_list);

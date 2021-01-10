@@ -23,11 +23,26 @@
 #include <stdio.h>
 #include <string.h>
 #include <psp2/types.h>
+#include <psp2/kernel/threadmgr.h>
 #include "../include/sysmodepatch.h"
 #include "../include/hooks.h"
 #include "../include/debug.h"
 
-typedef struct SceSharedFbInfo { // size is 0x58
+#ifdef USE_VITASDK
+#include <psp2/sharedfb.h>
+// vitasdk lacks prototypes for these right now
+SceGxmErrorCode sceGxmVshSyncObjectOpen(uint32_t key, SceGxmSyncObject **syncObject);
+SceGxmErrorCode sceGxmVshSyncObjectClose(uint32_t key, SceGxmSyncObject *syncObject);
+// sceGxmVsh stuff also has different names in dolcesdk
+#define sceGxmInitializeInternal sceGxmVshInitialize
+#define sceGxmSyncObjectOpenShared sceGxmVshSyncObjectOpen
+#define sceGxmSyncObjectCloseShared sceGxmVshSyncObjectClose
+#else
+#include <psp2/gxm_internal.h>
+#endif
+
+// this struct is already defined in vitasdk; use a unique name here
+typedef struct SceSharedFbInfoPib { // size is 0x58
 	void* base1;		// cdram base
 	int memsize;
 	void* base2;		// cdram base
@@ -50,9 +65,9 @@ typedef struct SceSharedFbInfo { // size is 0x58
 	int unk_4C;
 	int unk_50;
 	int unk_54;
-} SceSharedFbInfo;
+} SceSharedFbInfoPib;
 
-static SceSharedFbInfo info;
+static SceSharedFbInfoPib info;
 static SceUID shfb_id;
 static void *displayBufferData[2];
 static int isDestroyingSurface, currentContext, framebegun = 0;
@@ -74,7 +89,7 @@ SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params)
 
 	while (1) {
 		shfb_id = sceSharedFbOpen(1);
-		sceSharedFbGetInfo(shfb_id, &info);
+		sceSharedFbGetInfo(shfb_id, (SceSharedFbInfo *)&info); // cast to proper struct; they're identical
 		sceKernelDelayThread(40);
 		if (info.curbuf == 1)
 			sceSharedFbClose(shfb_id);
@@ -90,11 +105,11 @@ SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params)
 	return error;
 }
 
-unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int *memory)
+unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, unsigned int *memory)
 {
 	if (systemMode && memoryType == 4 && isCreatingSurface) // ColorSurface/Framebuffer Allocation. We want to skip this and replace with SharedFb Framebuffer
 	{
-		memory[0] = displayBufferData[bufferDataIndex];
+		memory[0] = (unsigned int)displayBufferData[bufferDataIndex];
 		return 0;
 	}
 	if (msaaEnabled && memoryType == 5 && isCreatingSurface)
@@ -128,7 +143,7 @@ SceGxmErrorCode sceGxmSyncObjectCreate_patch(SceGxmSyncObject **syncObject)
 int pglPlatformContextBeginFrame_patch(int context, int framebuffer)
 {
 	if(!*(int *)(context + 0x12bf0) && !framebegun) { // GL FrameBuffer Object ID
-		sceSharedFbBegin(shfb_id, &info);
+		sceSharedFbBegin(shfb_id, (SceSharedFbInfo *)&info);
 		info.owner = 1;
 		framebegun = 1;
 	}
