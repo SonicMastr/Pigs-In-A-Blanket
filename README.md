@@ -5,26 +5,47 @@
 #### Now with System App and Experimental MSAAx4 Support!
 ---
 ### Compiling
-- Install [DolceSDK](https://github.com/DolceSDK/doc) (Has not been tested on VitaSDK as of yet)
+#### With DolceSDK
+- Install [DolceSDK](https://github.com/DolceSDK/doc)
+- Run ```ddpm taihen``` to install `libtaihen_stub`
 - Run ```make -j4 install```
+- Link libpib.a in your projects
+#### With VitaSDK
+- Install [VitaSDK](https://vitasdk.org/)
+- Run ```vdpm taihen``` to install `libtaihen_stub`
+- Run ```make -j4 install USE_VITASDK=1```
 - Link libpib.a in your projects
 
 Note when building your projects:
 
 **ALWAYS COMPILE YOUR PROJECTS WITH UNSAFE**. Doing otherwise will result in PIB failing.
 
-If using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 2097152")```<br>If using Makefile, make sure to specify ```dolce-elf-create -h 2097152```
+With DolceSDK:
+* if using CMake, make sure to specify ```set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 2097152")```
+* if using Makefile, make sure to specify ```dolce-elf-create -h 2097152```
+
+With VitaSDK you can specify the SceLibc heap size by defining `sceLibcHeapSize` in your code:
+```
+unsigned int sceLibcHeapSize = 2 * 1024 * 1024;
+```
 
 Piglet needs an SceLibc heap size of at least 2MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
 
 These stubs are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
 
+With DolceSDK:
 - liblibScePiglet_stub.a (Yes, that's the name)
 - libSceShaccCg_stub.a
 - libtaihen_stub.a
 - libSceGxmInternalForVsh_stub.a
 - libSceGxmInternal_stub.a
 - libSceSharedFb_stub.a
+- libSceAppMgr_stub.a
+
+With VitaSDK:
+- liblibScePiglet_stub.a (Yes, that's the name)
+- libSceShaccCg_stub.a
+- libtaihen_stub.a
 - libSceAppMgr_stub.a
 
 ### Check the "Samples" folder for examples of how to use PIB to initialize OpenGLES 2.0 with EGL or GLFW.
