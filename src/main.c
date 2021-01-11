@@ -25,12 +25,19 @@
 #include <psp2/types.h>
 #include <psp2/kernel/modulemgr.h>
 #include <psp2/shacccg.h>
-#include <psp2/kernel/iofilemgr.h>
 #include <psp2/kernel/clib.h>
 #include "../include/hooks.h"
 #include "../include/debug.h"
 #include "../include/sha1.h"
 #include <taihen.h>
+
+#ifdef USE_VITASDK
+# include <psp2/io/fcntl.h>
+# define sceShaccCgSetMemAllocator sceShaccCgSetDefaultAllocator
+# define SCE_NULL NULL
+#else
+# include <psp2/kernel/iofilemgr.h>
+#endif
 
 static SceUID modID[4];
 static SceBool pibIsInit = SCE_FALSE;

@@ -23,11 +23,10 @@
 #define SYSMODEPATCH_H_
 
 #include <psp2/gxm.h>
-#include <psp2/gxm_internal.h>
 #include <psp2/appmgr.h>
 
 SceGxmErrorCode sceGxmInitialize_patch(const SceGxmInitializeParams *params);
-unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, int *memory);
+unsigned int pglMemoryAllocAlign_patch(int memoryType, int size, int unused, unsigned int *memory);
 void *pglPlatformSurfaceCreateWindow_detect(int a1, int a2, int a3, int a4, int *a5);
 SceGxmErrorCode sceGxmSyncObjectCreate_patch(SceGxmSyncObject **syncObject);
 int pglPlatformContextBeginFrame_patch(int context, int framebuffer);

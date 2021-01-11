@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#include <psp2common/types.h>
+#include <psp2/types.h>
 
 /**
  * @brief PIB Error Codes.
