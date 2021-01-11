@@ -43,7 +43,7 @@ With DolceSDK:
 - libSceAppMgr_stub.a
 
 With VitaSDK:
-- liblibScePiglet_stub.a (Yes, that's the name)
+- liblibScePiglet_stub.a
 - libSceShaccCg_stub.a
 - libtaihen_stub.a
 - libSceAppMgr_stub.a
