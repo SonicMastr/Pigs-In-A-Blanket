@@ -56,4 +56,6 @@ SceGxmErrorCode sceGxmShaderPatcherCreateFragmentProgram_msaaPatch(SceGxmShaderP
                                                                     const SceGxmBlendInfo *blendInfo,
                                                                     const SceGxmProgram *vertexProgram,
                                                                     SceGxmFragmentProgram **fragmentProgram);
+void glClear_loadPatch(unsigned int mask);
+SceGxmErrorCode sceGxmBeginScene_loadPatch(SceGxmContext *context, unsigned int flags, const SceGxmRenderTarget *renderTarget, const SceGxmValidRegion *validRegion, SceGxmSyncObject *vertexSyncObject, SceGxmSyncObject *fragmentSyncObject, const SceGxmColorSurface *colorSurface, const SceGxmDepthStencilSurface *depthStencil);
 #endif /* PATCHES_H_ */
