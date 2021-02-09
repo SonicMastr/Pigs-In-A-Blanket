@@ -55,7 +55,7 @@ void loadHooks(PibOptions options)
     hook[5] = taiHookFunctionExport(&hookRef[5], modInfo.name, 0xB4FE1ABB, 0x33A55EAB, eglGetConfigAttrib_intervalPatch);
     hook[6] = taiHookFunctionOffset(&hookRef[6], modInfo.modid, 0, 0x158F8, 1, pglDisplaySetSwapInterval_intervalPatch);
     hook[7] = taiHookFunctionImport(&hookRef[7], modInfo.name, 0x5ED8F994, 0x5795E898, sceDisplayWaitVblankStart_intervalPatch);
-    LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[5], hook[6]);
+    LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[6], hook[7]);
     if ((options & PIB_SYSTEM_MODE) || (options & PIB_ENABLE_MSAA)) {
         hook[8] = taiHookFunctionOffset(&hookRef[8], modInfo.modid, 0, 0x17d24, 1, pglMemoryAllocAlign_patch);
         hook[10] = taiHookFunctionOffset(&hookRef[10], modInfo.modid, 0, 0x33074, 1, pglPlatformSurfaceCreateWindow_detect);
