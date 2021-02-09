@@ -173,6 +173,8 @@ SceGxmErrorCode sceGxmColorSurfaceInit_msaaPatch(SceGxmColorSurface *surface,
                                                     uint32_t strideInPixels,
                                                     void *data)
 {
+    if (isCreatingSurface)
+        scaleMode = SCE_GXM_COLOR_SURFACE_SCALE_MSAA_DOWNSCALE;
     return TAI_CONTINUE(SceGxmErrorCode, hookRef[16], surface, colorFormat, surfaceType, scaleMode, outputRegisterSize, width, height, strideInPixels, data);
 }
 
