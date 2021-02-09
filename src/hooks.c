@@ -82,6 +82,9 @@ void loadHooks(PibOptions options)
         hook[19] = taiHookFunctionImport(&hookRef[19], modInfo.name, 0xF76B66BD, 0x4ED2E49D, sceGxmShaderPatcherCreateFragmentProgram_msaaPatch);
         LOG("MSAA ENABLED!\n");
     }
+
+    hook[20] = taiHookFunctionExport(&hookRef[20], modInfo.name, 0xB4FE1ABB, 0xFD616E54, glClear_loadPatch);
+    hook[21] = taiHookFunctionImport(&hookRef[21], modInfo.name, 0xF76B66BD, 0x8734FF4E, sceGxmBeginScene_loadPatch);
 }
 
 void releaseHooks(void)

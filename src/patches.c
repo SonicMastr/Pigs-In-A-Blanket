@@ -28,7 +28,12 @@
 #include "../include/hooks.h"
 #include "../include/debug.h"
 
+#define GL_DEPTH_BUFFER_BIT 0x00000100
+#define GL_STENCIL_BUFFER_BIT 0x00000400
+#define GL_COLOR_BUFFER_BIT 0x00004000
+
 static int swap_interval = 1;
+static int clear = 0, clearDepth = 0, clearStencil = 0;
 
 void glGetBooleanv_shaderCompilerPatch(unsigned int pname, unsigned char *data)
 {
@@ -207,4 +212,51 @@ SceGxmErrorCode sceGxmShaderPatcherCreateFragmentProgram_msaaPatch(SceGxmShaderP
 {
     multisampleMode = SCE_GXM_MULTISAMPLE_4X;
     return TAI_CONTINUE(SceGxmErrorCode, hookRef[19], shaderPatcher, programId, outputFormat, multisampleMode, blendInfo, vertexProgram, fragmentProgram);
+}
+
+void glClear_loadPatch(unsigned int mask)
+{
+    if (mask & GL_DEPTH_BUFFER_BIT)
+        clearDepth = 1;
+
+    if (mask & GL_STENCIL_BUFFER_BIT)
+        clearStencil = 1;
+
+    clear = 1;
+
+    TAI_CONTINUE(void, hookRef[20], mask);
+
+    clear = 0;
+}
+
+SceGxmErrorCode sceGxmBeginScene_loadPatch(SceGxmContext *context, unsigned int flags, const SceGxmRenderTarget *renderTarget, const SceGxmValidRegion *validRegion, SceGxmSyncObject *vertexSyncObject, SceGxmSyncObject *fragmentSyncObject, const SceGxmColorSurface *colorSurface, const SceGxmDepthStencilSurface *depthStencil)
+{
+    if (!clear || !depthStencil || !sceGxmDepthStencilSurfaceIsEnabled(depthStencil))
+        return TAI_CONTINUE(SceGxmErrorCode, hookRef[21], context, flags, renderTarget, validRegion, vertexSyncObject, fragmentSyncObject, colorSurface, depthStencil);
+
+    size_t depthStencilFormat = sceGxmDepthStencilSurfaceGetFormat(depthStencil);
+
+    switch(depthStencilFormat)
+    {
+    case SCE_GXM_DEPTH_STENCIL_FORMAT_DF32M:
+    case SCE_GXM_DEPTH_STENCIL_FORMAT_D16:
+        if (clearDepth)
+            sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
+        break;
+    case SCE_GXM_DEPTH_STENCIL_FORMAT_DF32M_S8:
+    case SCE_GXM_DEPTH_STENCIL_FORMAT_S8D24:
+        if (clearDepth && clearStencil)
+            sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
+        break;
+    case SCE_GXM_DEPTH_STENCIL_FORMAT_S8:
+        if (clearStencil)
+            sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
+        break;
+    }
+
+    int ret = TAI_CONTINUE(SceGxmErrorCode, hookRef[21], context, flags, renderTarget, validRegion, vertexSyncObject, fragmentSyncObject, colorSurface, depthStencil);
+
+    sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_ENABLED);
+
+    return ret;
 }
