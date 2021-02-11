@@ -111,3 +111,16 @@ PibError pibTerm(void)
     pibIsInit = SCE_FALSE;
     return PIB_SUCCESS;	
 }
+
+#ifdef PIB_PRX
+int module_stop(SceSize argc, const void *args) {
+	LOG("PIB module stop\n");
+	return SCE_KERNEL_STOP_SUCCESS;
+}
+
+void _start() __attribute__((weak, alias("module_start")));
+int module_start(SceSize argc, void *args) {
+	LOG("PIB module start\n");
+	return SCE_KERNEL_START_SUCCESS;
+}
+#endif
