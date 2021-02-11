@@ -11,7 +11,7 @@ else
 endif
 
 LIB     = pib
-OBJS    = src/main.o src/hooks.o src/shacccgpatch.o src/patches.o src/sha1.o src/sysmodepatch.o
+OBJS    = src/pib.o src/hooks.o src/shacccgpatch.o src/patches.o src/sha1.o src/sysmodepatch.o
 INCLUDE = include
 
 PREFIX ?= $(SDKPATH)/arm-$(SDKPREFIX)-eabi
