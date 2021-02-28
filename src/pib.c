@@ -4,17 +4,17 @@
  * 
  *  This file is part of Pigs In A Blanket
  * 
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Pigs in a Blanket is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  * 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  * 
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  ****************************************************************************/
@@ -22,25 +22,35 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <psp2/types.h>
-#include <psp2/kernel/modulemgr.h>
-#include <psp2/shacccg.h>
-#include <psp2/kernel/clib.h>
+#include "../include/common.h"
+#ifdef USE_VITASDK
+# include <psp2/kernel/modulemgr.h>
+# include <psp2/shacccg.h>
+# include <psp2/kernel/clib.h>
+# include <psp2/io/fcntl.h>
+# define sceShaccCgSetMemAllocator sceShaccCgSetDefaultAllocator
+# define SCE_NULL NULL
+#else
+# include <kernel/modulemgr.h>
+# include <kernel/iofilemgr.h>
+#endif
 #include "../include/hooks.h"
 #include "../include/debug.h"
 #include "../include/sha1.h"
 #include <taihen.h>
 
-#ifdef USE_VITASDK
-# include <psp2/io/fcntl.h>
-# define sceShaccCgSetMemAllocator sceShaccCgSetDefaultAllocator
-# define SCE_NULL NULL
-#else
-# include <psp2/kernel/iofilemgr.h>
-#endif
-
 static SceUID modID[4];
 static SceBool pibIsInit = SCE_FALSE;
+static char searchDir[200] = "ur0:data/external/"; // Max Path Length
+static char modulePath[200];
+
+static char *getModulePath(const char *moduleName)
+{
+    memset(modulePath, '\0', sizeof(modulePath));
+    strncpy(modulePath, searchDir, strlen(searchDir));
+    strncat(modulePath, moduleName, strlen(moduleName));
+    return modulePath;
+}
 
 static PibError loadModules(PibOptions options)
 {
@@ -50,10 +60,10 @@ static PibError loadModules(PibOptions options)
         if (modID[2] = sceKernelLoadStartModule("vs0:sys/external/libc.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[2] < 0 && modID[2] != 0x8002D014 && modID[2] != 0x8002D013)
             return PIB_ERROR_LIBC_FAILED;
     }
-    if (modID[1] = sceKernelLoadStartModule("ur0:data/external/libScePiglet.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[1] < 0)
+    if (modID[1] = sceKernelLoadStartModule(getModulePath("libScePiglet.suprx"), 0, SCE_NULL, 0, SCE_NULL, 0), modID[1] < 0)
         return PIB_ERROR_PIGLET_FAILED;
     if (options & PIB_SHACCCG) {
-        if (modID[0] = sceKernelLoadStartModule("ur0:data/external/libshacccg.suprx", 0, SCE_NULL, 0, SCE_NULL, 0), modID[0] < 0)
+        if (modID[0] = sceKernelLoadStartModule(getModulePath("libshacccg.suprx"), 0, SCE_NULL, 0, SCE_NULL, 0), modID[0] < 0)
             return PIB_ERROR_SHACCCG_FAILED;
         sceShaccCgSetMemAllocator(malloc, free);
     }
@@ -118,8 +128,12 @@ int module_stop(SceSize argc, const void *args) {
 	return SCE_KERNEL_STOP_SUCCESS;
 }
 
-void _start() __attribute__((weak, alias("module_start")));
 int module_start(SceSize argc, void *args) {
+    if (argc)
+    {
+        memset(modulePath, '\0', sizeof((char)args));
+        strncpy(modulePath, (char)args, strlen((char)args));
+    }
 	LOG("PIB module start\n");
 	return SCE_KERNEL_START_SUCCESS;
 }

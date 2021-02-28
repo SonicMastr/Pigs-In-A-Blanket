@@ -4,17 +4,17 @@
  * 
  *  This file is part of Pigs In A Blanket
  * 
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Pigs in a Blanket is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  * 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  * 
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  ****************************************************************************/
@@ -26,7 +26,11 @@
 extern "C" {
 #endif
 
-#include <psp2/types.h>
+#if _SCE_HOST_COMPILER_SNC && defined(PIB_PRX)
+#define PRX_INTERFACE __declspec (dllexport)
+#else
+#define PRX_INTERFACE
+#endif
 
 /**
  * @brief PIB Error Codes.
@@ -65,7 +69,7 @@ typedef enum _PibOptions {
  * @return PibError Code
  * 
  */
-PibError pibInit(PibOptions pibOptions);
+PRX_INTERFACE PibError pibInit(PibOptions pibOptions);
 
 /**
  * @brief Terminates and unloads Piglet and optionally SceShaccCg if specified by pibInit
@@ -73,7 +77,7 @@ PibError pibInit(PibOptions pibOptions);
  * @return PibError Code
  * 
  */
-PibError pibTerm(void);
+PRX_INTERFACE PibError pibTerm(void);
 
 #ifdef __cplusplus
 }

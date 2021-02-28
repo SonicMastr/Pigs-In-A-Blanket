@@ -1,18 +1,32 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.19)
 
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  if(DEFINED ENV{DOLCESDK})
-    set(CMAKE_TOOLCHAIN_FILE "$ENV{DOLCESDK}/share/dolce.toolchain.cmake" CACHE PATH "toolchain file")
-  else()
-    message(FATAL_ERROR "Please define DOLCESDK to point to your SDK path!")
-  endif()
-endif()
+set(CMAKE_TOOLCHAIN_FILE "$ENV{SCE_PSP2_SDK_DIR}/host_tools/build/cmake/psp2-snc-toolchain.cmake")
 
-include("$ENV{DOLCESDK}/share/dolce.cmake" REQUIRED)
+project(pib LANGUAGES C)
 
-project(pib)
+include(VitaDevelopmentSuite)
+set(CMAKE_C_STANDARD 99)
 
-add_executable(${PROJECT_NAME}
+add_compile_options(
+  -Xdiag=0 -Xquit=2 -O3
+)
+
+add_link_options(
+  -s
+)
+
+include_directories(
+  ${VDSUITE_USER_INCLUDE_DIRECTORIES}
+  ${VDSUITE_STANDARD_INCLUDE_DIRECTORIES}
+  include
+)
+
+link_directories(
+  ${VDSUITE_LIBRARY_DIRECTORIES}
+  ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+add_library(${PROJECT_NAME} STATIC
   src/pib.c
   src/hooks.c
   src/patches.c
@@ -21,20 +35,18 @@ add_executable(${PROJECT_NAME}
   src/sysmodepatch.c
 )
 
-link_directories(${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -Wno-incompatible-pointer-types -Wno-pointer-sign -O3 -nostartfiles -nostdlib -DVITA -D__VITA__ -DPIB_PRX")
+add_definitions(-DPIB_PRX)
 
-set_target_properties(${PROJECT_NAME}
-  PROPERTIES LINK_FLAGS
-  -nostartfiles
+add_library("${PROJECT_NAME}.suprx" SHARED
+  src/pib.c
+  src/hooks.c
+  src/patches.c
+  src/sha1.c
+  src/shacccgpatch.c
+  src/sysmodepatch.c
 )
 
-include_directories(
-  include
-)
-
-target_link_libraries(${PROJECT_NAME}
-  SceLibc_stub_weak
+target_link_libraries("${PROJECT_NAME}.suprx"
   SceGxm_stub_weak
   SceDisplay_stub_weak
   SceThreadmgr_stub_weak
@@ -46,15 +58,4 @@ target_link_libraries(${PROJECT_NAME}
   SceSharedFb_stub_weak
   SceGxmInternalForVsh_stub_weak
   SceGxmInternal_stub_weak
-)
-
-dolce_create_self(${PROJECT_NAME}.suprx ${PROJECT_NAME}
-  CONFIG ${CMAKE_SOURCE_DIR}/pib.yml
-  UNSAFE
-)
-
-dolce_create_stubs(${PROJECT_NAME}_stubs 
-  ${PROJECT_NAME} 
-  ${CMAKE_SOURCE_DIR}/pib.yml
-  LIB pib_stub
 )
