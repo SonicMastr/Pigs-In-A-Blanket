@@ -56,5 +56,6 @@ build
 .vscode
 
 piglet_stub/out
+shacc_stub/out
 combine
 samples/cube-glfw-back
