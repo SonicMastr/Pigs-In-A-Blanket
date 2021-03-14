@@ -67,43 +67,83 @@ size_t EsslParameterCreate(EsslParameter *parameter, SceShaccCgParameter shaccPa
     switch (parameterClass)
     {
     case SCE_SHACCCG_PARAMETERCLASS_SCALAR:
-        switch (baseType)
+        if (type == ESSL_PARAMETER_TYPE_ATTRIBUTE)
         {
-        case SCE_SHACCCG_BASETYPE_BOOL:
-            parameter->format = ESSL_PARAMETER_FORMAT_BOOL;
-            break;
-        case SCE_SHACCCG_BASETYPE_CHAR:
-        case SCE_SHACCCG_BASETYPE_SHORT:
-        case SCE_SHACCCG_BASETYPE_INT:
-            parameter->format = ESSL_PARAMETER_FORMAT_INT;
-            break;
-        case SCE_SHACCCG_BASETYPE_FIXED:
-        case SCE_SHACCCG_BASETYPE_HALF:
-        case SCE_SHACCCG_BASETYPE_FLOAT:
-            parameter->format = ESSL_PARAMETER_FORMAT_FLOAT;
-            break;
-        default:
-            return 0;
+            switch (baseType)
+            {
+            case SCE_SHACCCG_BASETYPE_BOOL:
+            case SCE_SHACCCG_BASETYPE_CHAR:
+            case SCE_SHACCCG_BASETYPE_SHORT:
+            case SCE_SHACCCG_BASETYPE_INT:
+            case SCE_SHACCCG_BASETYPE_FIXED:
+            case SCE_SHACCCG_BASETYPE_HALF:
+            case SCE_SHACCCG_BASETYPE_FLOAT:
+                parameter->format = ESSL_PARAMETER_FORMAT_FLOAT;
+                break;
+            default:
+                return 0;
+            }
         }
+        else
+        {
+            switch (baseType)
+            {
+            case SCE_SHACCCG_BASETYPE_BOOL:
+                parameter->format = ESSL_PARAMETER_FORMAT_BOOL;
+                break;
+            case SCE_SHACCCG_BASETYPE_CHAR:
+            case SCE_SHACCCG_BASETYPE_SHORT:
+            case SCE_SHACCCG_BASETYPE_INT:
+                parameter->format = ESSL_PARAMETER_FORMAT_INT;
+                break;
+            case SCE_SHACCCG_BASETYPE_FIXED:
+            case SCE_SHACCCG_BASETYPE_HALF:
+            case SCE_SHACCCG_BASETYPE_FLOAT:
+                parameter->format = ESSL_PARAMETER_FORMAT_FLOAT;
+                break;
+            default:
+                return 0;
+            }
+        }    
         break;
     case SCE_SHACCCG_PARAMETERCLASS_VECTOR:
-        switch (baseType)
+        if (type == ESSL_PARAMETER_TYPE_ATTRIBUTE)
         {
-        case SCE_SHACCCG_BASETYPE_BOOL:
-            parameter->format = ESSL_PARAMETER_FORMAT_BOOL + (vectorWidth - 1);
-            break;
-        case SCE_SHACCCG_BASETYPE_CHAR:
-        case SCE_SHACCCG_BASETYPE_SHORT:
-        case SCE_SHACCCG_BASETYPE_INT:
-            parameter->format = ESSL_PARAMETER_FORMAT_INT + (vectorWidth - 1);
-            break;
-        case SCE_SHACCCG_BASETYPE_FIXED:
-        case SCE_SHACCCG_BASETYPE_HALF:
-        case SCE_SHACCCG_BASETYPE_FLOAT:
-            parameter->format = ESSL_PARAMETER_FORMAT_FLOAT + (vectorWidth - 1);
-            break;
-        default:
-            return 0;
+            switch (baseType)
+            {
+            case SCE_SHACCCG_BASETYPE_BOOL:
+            case SCE_SHACCCG_BASETYPE_CHAR:
+            case SCE_SHACCCG_BASETYPE_SHORT:
+            case SCE_SHACCCG_BASETYPE_INT:
+            case SCE_SHACCCG_BASETYPE_FIXED:
+            case SCE_SHACCCG_BASETYPE_HALF:
+            case SCE_SHACCCG_BASETYPE_FLOAT:
+                parameter->format = ESSL_PARAMETER_FORMAT_FLOAT + (vectorWidth - 1);
+                break;
+            default:
+                return 0;
+            }
+        }
+        else
+        {
+            switch (baseType)
+            {
+            case SCE_SHACCCG_BASETYPE_BOOL:
+                parameter->format = ESSL_PARAMETER_FORMAT_BOOL + (vectorWidth - 1);
+                break;
+            case SCE_SHACCCG_BASETYPE_CHAR:
+            case SCE_SHACCCG_BASETYPE_SHORT:
+            case SCE_SHACCCG_BASETYPE_INT:
+                parameter->format = ESSL_PARAMETER_FORMAT_INT + (vectorWidth - 1);
+                break;
+            case SCE_SHACCCG_BASETYPE_FIXED:
+            case SCE_SHACCCG_BASETYPE_HALF:
+            case SCE_SHACCCG_BASETYPE_FLOAT:
+                parameter->format = ESSL_PARAMETER_FORMAT_FLOAT + (vectorWidth - 1);
+                break;
+            default:
+                return 0;
+            }
         }
         break;
     case SCE_SHACCCG_PARAMETERCLASS_MATRIX:
