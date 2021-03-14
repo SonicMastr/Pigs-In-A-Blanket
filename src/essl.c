@@ -254,8 +254,8 @@ inline void EsslParameterListLink(EsslParameterList *parameterList, EsslParamete
     parameterList->totalNameSize += node->nameLength;
 }
 
-int EsslParameterListCreateArray(EsslParameterList *parameterList, SceShaccCgParameter *parameter, EsslParameterType paramType, const char *parentName);
-int EsslParameterListCreateStructure(EsslParameterList *parameterList, SceShaccCgParameter *parameter, EsslParameterType paramType, const char *parentName, int arrayParent)
+int EsslParameterListCreateArray(EsslParameterList *parameterList, SceShaccCgParameter parameter, EsslParameterType paramType, const char *parentName);
+int EsslParameterListCreateStructure(EsslParameterList *parameterList, SceShaccCgParameter parameter, EsslParameterType paramType, const char *parentName, int arrayParent)
 {
     EsslParameterListNode *currentNode = NULL;
     SceShaccCgParameter currentParameter = sceShaccCgGetFirstStructParameter(parameter);
@@ -338,7 +338,7 @@ int EsslParameterListCreateStructure(EsslParameterList *parameterList, SceShaccC
     return 1;
 }
 
-int EsslParameterListCreateArray(EsslParameterList *parameterList, SceShaccCgParameter *parameter, EsslParameterType paramType, const char *parentName)
+int EsslParameterListCreateArray(EsslParameterList *parameterList, SceShaccCgParameter parameter, EsslParameterType paramType, const char *parentName)
 {
     const char *arrayName = sceShaccCgGetParameterName(parameter);
     char *paramName = NULL;
@@ -360,7 +360,7 @@ int EsslParameterListCreateArray(EsslParameterList *parameterList, SceShaccCgPar
             sprintf(paramName, "%s%s", parentName, arrayName);
         }
         else
-            paramName = arrayName;
+            paramName = (char *)arrayName;
 
         while (currentParameter != NULL)
         {
@@ -402,7 +402,7 @@ fail:
     return 0;
 }
 
-int EsslParameterListCreate(EsslParameterList *parameterList, SceShaccCgCompileOutput *compileOutput, EsslParameterType paramType)
+int EsslParameterListCreate(EsslParameterList *parameterList, const SceShaccCgCompileOutput *compileOutput, EsslParameterType paramType)
 {
     SceShaccCgParameterVariability targetVariabiltiy = SCE_SHACCCG_VARIABILITY_INVALID;
     SceShaccCgParameterDirection targetDirection = SCE_SHACCCG_DIRECTION_INVALID;
@@ -538,7 +538,7 @@ void* EsslParameterTableCreate(EsslParameterList *parameterLists, size_t *parame
     return parameterTable;
 }
 
-void EsslCreateBinary(SceShaccCgCompileOutput *compileOutput, void **binary, size_t *binarySize, int vertexShader)
+void EsslCreateBinary(const SceShaccCgCompileOutput *compileOutput, void **binary, size_t *binarySize, int vertexShader)
 {
     EsslHeader header = {"GXPES", 0, 0};
     EsslParameterList parameterLists[3] = {0};

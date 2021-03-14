@@ -117,6 +117,6 @@ typedef struct SceShaccCgCompileOutput SceShaccCgCompileOutput; // Forward decla
  * @param binary Pointer to pass the GXPES binary to.
  * @param binarySize Size of the output binary
  */
-void EsslCreateBinary(SceShaccCgCompileOutput *compileOutput, void **binary, size_t *binarySize, int vertexShader);
+void EsslCreateBinary(const SceShaccCgCompileOutput *compileOutput, void **binary, size_t *binarySize, int vertexShader);
 
 #endif /* ESSL_H_ */
