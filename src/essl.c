@@ -152,9 +152,6 @@ size_t EsslParameterCreate(EsslParameter *parameter, SceShaccCgParameter shaccPa
     case SCE_SHACCCG_PARAMETERCLASS_SAMPLER:
         switch (baseType)
         {
-        case SCE_SHACCCG_BASETYPE_SAMPLER1D:
-        case SCE_SHACCCG_BASETYPE_ISAMPLER1D:
-        case SCE_SHACCCG_BASETYPE_USAMPLER1D:
         case SCE_SHACCCG_BASETYPE_SAMPLER2D:
         case SCE_SHACCCG_BASETYPE_ISAMPLER2D:
         case SCE_SHACCCG_BASETYPE_USAMPLER2D:
@@ -166,7 +163,7 @@ size_t EsslParameterCreate(EsslParameter *parameter, SceShaccCgParameter shaccPa
             parameter->format = ESSL_PARAMETER_FORMAT_SAMPLERCUBE;
             break;
         default:
-            // Unreachable.
+            return 0;
             break;
         }
         break;
