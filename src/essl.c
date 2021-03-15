@@ -16,11 +16,8 @@ typedef struct EsslParameterListNode EsslParameterListNode;
 typedef struct EsslParameterListNode
 {
     EsslParameterListNode *next;
-    union 
-    {
-        EsslParameter parameter;
-        EsslVaryingParameter varyingParameter;
-    };
+    
+    EsslParameter parameter;
     size_t nameLength;
 } EsslParameterListNode;
 
@@ -34,10 +31,6 @@ typedef struct EsslParameterList
 inline size_t EsslParameterSetName(EsslParameter *parameter, SceShaccCgParameter shaccParameter, const char *parentName)
 {
     const char *paramName = sceShaccCgGetParameterName(shaccParameter);
-
-    // Only the vertex program will encounter this, so make it nice.
-    if ((strcmp(paramName, "main") == 0) && parentName == NULL)
-        paramName = "gl_Position";
 
     size_t nameLength = strlen(paramName) + 1;
 
@@ -184,61 +177,7 @@ size_t EsslParameterCreate(EsslParameter *parameter, SceShaccCgParameter shaccPa
 
     parameter->type = type;
     parameter->elementCount = elementCount;
-    parameter->state = sceShaccCgIsParameterReferenced(shaccParameter);
-
-    if (parameter->type >= ESSL_PARAMETER_TYPE_VARYING_INPUT)
-    {
-        const char *semantic = sceShaccCgGetParameterSemantic(shaccParameter);
-        size_t resourceIndex = sceShaccCgGetParameterResourceIndex(shaccParameter);
-
-        EsslVaryingParameter *varyingParameter = (EsslVaryingParameter *)parameter;
-
-        if (semantic != NULL)
-        {
-            if ((strncmp(semantic, "TEXCOORD", strlen("TEXCOORD")) == 0) || (strncmp(semantic, "TEX", strlen("TEX")) == 0))
-            {
-                varyingParameter->varyingType = ESSL_VARYING_TYPE_TEXCOORD;
-                varyingParameter->resourceIndex = resourceIndex;
-            }
-            else if (strncmp(semantic, "POSITION", strlen("POSITION")) == 0)
-            {
-                varyingParameter->varyingType = ESSL_VARYING_TYPE_POSITION;
-                varyingParameter->resourceIndex = 0;
-            }
-            else if ((strncmp(semantic, "PSIZE", strlen("PSIZE")) == 0) || (strncmp(semantic, "PSIZ", strlen("PSIZ")) == 0))
-            {
-                varyingParameter->varyingType = ESSL_VARYING_TYPE_POINTSIZE;
-                varyingParameter->resourceIndex = 0;
-            }
-            else if (strncmp(semantic, "FACE", strlen("FACE")) == 0)
-            {
-                varyingParameter->varyingType = ESSL_VARYING_TYPE_FRONTFACE;
-                varyingParameter->resourceIndex = 0;
-            }
-            else if (strncmp(semantic, "WPOS", strlen("WPOS")) == 0)
-            {
-                varyingParameter->varyingType = ESSL_VARYING_TYPE_FRAGCOORD;
-                varyingParameter->resourceIndex = 0;
-            }
-            else if ((strncmp(semantic, "SPRITECOORD", strlen("SPRITECOORD")) == 0) || (strncmp(semantic, "POINTCOORD", strlen("POINTCOORD")) == 0))
-            {
-                varyingParameter->varyingType = ESSL_VARYING_TYPE_POINTCOORD;
-                varyingParameter->resourceIndex = 0;
-            }
-            else
-            {
-                varyingParameter->varyingType = -1;
-                varyingParameter->resourceIndex = -1;
-            }
-        }
-        else
-        {
-            varyingParameter->varyingType = -1;
-            varyingParameter->resourceIndex = -1;
-        }
-
-        memset(varyingParameter->padding, 0xFF, 0x24);
-    }
+    parameter->state = ESSL_PARAMETER_STATE_ACTIVE;
 
     if (elementCount == 1)
         return EsslParameterSetName(parameter, shaccParameter, parentName);
@@ -294,6 +233,9 @@ int EsslParameterListCreateStructure(EsslParameterList *parameterList, SceShaccC
 
     while (currentParameter != NULL)
     {
+        if (sceShaccCgIsParameterReferenced(currentParameter) == 0)
+            goto next;
+
         parameterClass = sceShaccCgGetParameterClass(currentParameter);
         switch (parameterClass)
         {
@@ -322,7 +264,7 @@ int EsslParameterListCreateStructure(EsslParameterList *parameterList, SceShaccC
         default:
             break;
         }
-        
+    next:
         currentParameter = sceShaccCgGetNextParameter(currentParameter);
         continue;
 
@@ -346,6 +288,9 @@ int EsslParameterListCreateArray(EsslParameterList *parameterList, SceShaccCgPar
     EsslParameterListNode *currentNode = NULL;
     SceShaccCgParameter currentParameter = sceShaccCgGetArrayParameter(parameter, 0);
     SceShaccCgParameterClass parameterClass;
+
+    if (sceShaccCgIsParameterReferenced(parameter) == 0)
+        return 1;
 
     parameterClass = sceShaccCgGetParameterClass(currentParameter);
     switch (parameterClass)
@@ -417,14 +362,8 @@ int EsslParameterListCreate(EsslParameterList *parameterList, const SceShaccCgCo
         targetVariabiltiy = SCE_SHACCCG_VARIABILITY_UNIFORM;
         targetDirection = SCE_SHACCCG_DIRECTION_IN;
         break;
-    case ESSL_PARAMETER_TYPE_VARYING_INPUT:
-        targetVariabiltiy = SCE_SHACCCG_VARIABILITY_VARYING;
-        targetDirection = SCE_SHACCCG_DIRECTION_IN;
-        break;
-    case ESSL_PARAMETER_TYPE_VARYING_OUTPUT:
-        targetVariabiltiy = SCE_SHACCCG_VARIABILITY_VARYING;
-        targetDirection = SCE_SHACCCG_DIRECTION_OUT;
-        break;
+    default:
+        return 1;
     }
 
     EsslParameterListNode *currentNode = NULL;
@@ -434,6 +373,9 @@ int EsslParameterListCreate(EsslParameterList *parameterList, const SceShaccCgCo
     while (currentParameter != NULL)
     {
         if ((sceShaccCgGetParameterDirection(currentParameter) != targetDirection) || (sceShaccCgGetParameterVariability(currentParameter) != targetVariabiltiy))
+            goto next;
+
+        if (sceShaccCgIsParameterReferenced(currentParameter) == 0)
             goto next;
 
         parameterClass = sceShaccCgGetParameterClass(currentParameter);
@@ -490,12 +432,11 @@ void* EsslParameterTableCreate(EsslParameterList *parameterLists, size_t *parame
 
     *parameterTableSize += sizeof(EsslParameter) * parameterLists[0].count;
     *parameterTableSize += sizeof(EsslParameter) * parameterLists[1].count;
-    *parameterTableSize += sizeof(EsslVaryingParameter) * parameterLists[2].count;
+    
     nameOffset = *parameterTableSize;
 
     *parameterTableSize += parameterLists[0].totalNameSize;
     *parameterTableSize += parameterLists[1].totalNameSize;
-    *parameterTableSize += parameterLists[2].totalNameSize;
 
     if (*parameterTableSize == sizeof(uint32_t) * 3)
         return NULL;
@@ -515,8 +456,7 @@ void* EsslParameterTableCreate(EsslParameterList *parameterLists, size_t *parame
         EsslParameterListNode *node = parameterLists[i].head;
         while (node != NULL)
         {
-            size_t parameterSize = node->parameter.type > 1 ? sizeof(EsslVaryingParameter) : sizeof(EsslParameter);
-            memcpy(curPtr, &node->varyingParameter.header, parameterSize);
+            memcpy(curPtr, &node->parameter, sizeof(EsslParameter));
 
             char *paramName = node->parameter.parameterName;
             size_t nameLength = strlen(paramName) + 1;
@@ -525,7 +465,7 @@ void* EsslParameterTableCreate(EsslParameterList *parameterLists, size_t *parame
             ((EsslParameter *)curPtr)->parameterNameOffset = (uint32_t)namePtr - (uint32_t)curPtr;
 
             namePtr += nameLength;
-            curPtr += parameterSize;
+            curPtr += sizeof(EsslParameter);
 
             EsslParameterListNode *prevNode = node;
             node = node->next;
@@ -545,15 +485,9 @@ void EsslCreateBinary(const SceShaccCgCompileOutput *compileOutput, void **binar
     void *parameterTable = NULL;
     size_t parameterTableSize = 0;
 
-    for (int i = 2; i >= 0; i--)
+    for (int i = 1; i >= 0; i--)
     {
-        if (!vertexShader && i == 0)
-            break;
-
         EsslParameterType type = i;
-        
-        if (vertexShader && type == ESSL_PARAMETER_TYPE_VARYING_INPUT)
-            type = ESSL_PARAMETER_TYPE_VARYING_OUTPUT;
         
         // Don't attempt to process attributes for fragment shader.
         if (vertexShader == 0 && i == 0)
