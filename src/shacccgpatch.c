@@ -30,6 +30,7 @@
 #include <shacccg.h>
 #endif
 #include "../include/debug.h"
+#include "../include/essl.h"
 
 static SceShaccCgSourceFile source;
 static const SceShaccCgCompileOutput *output = NULL;
@@ -127,10 +128,12 @@ int pglPlatformShaderCompiler_CustomPatch(int a1, void *shader)
 
     if (output->programData)
     {
-        SceUInt8 *shaderData = malloc(output->programSize);
-        memcpy(shaderData, output->programData, output->programSize);
+        SceUInt8 *shaderData;
+        uint32_t shaderDataSize;
+        EsslCreateBinary(output, &shaderData, &shaderDataSize, *(uint32_t *)(shader + 0x1C) == 1);
+        
         *(SceUInt8**)(shader + 0x34) = shaderData;   // Compiled Shader Data Pointer
-        *(SceInt32*)(shader + 0x38) = output->programSize;  // Compiled Shader Data Size Pointer
+        *(SceInt32*)(shader + 0x38) = shaderDataSize;  // Compiled Shader Data Size Pointer
         *(int*)(&shader + 0x30) = 1;    // Flags Indicating Successful Compile
         *(int*)(&shader + 0x1d) = 2;
 

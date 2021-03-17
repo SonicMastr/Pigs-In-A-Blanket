@@ -246,22 +246,22 @@ SceGxmErrorCode sceGxmBeginScene_loadPatch(SceGxmContext *context, unsigned int 
     case SCE_GXM_DEPTH_STENCIL_FORMAT_DF32M:
     case SCE_GXM_DEPTH_STENCIL_FORMAT_D16:
         if (clearDepth)
-            sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
+            sceGxmDepthStencilSurfaceSetForceLoadMode((SceGxmDepthStencilSurface *)depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
         break;
     case SCE_GXM_DEPTH_STENCIL_FORMAT_DF32M_S8:
     case SCE_GXM_DEPTH_STENCIL_FORMAT_S8D24:
         if (clearDepth && clearStencil)
-            sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
+            sceGxmDepthStencilSurfaceSetForceLoadMode((SceGxmDepthStencilSurface *)depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
         break;
     case SCE_GXM_DEPTH_STENCIL_FORMAT_S8:
         if (clearStencil)
-            sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
+            sceGxmDepthStencilSurfaceSetForceLoadMode((SceGxmDepthStencilSurface *)depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_DISABLED);
         break;
     }
 
     int ret = TAI_CONTINUE(SceGxmErrorCode, hookRef[21], context, flags, renderTarget, validRegion, vertexSyncObject, fragmentSyncObject, colorSurface, depthStencil);
 
-    sceGxmDepthStencilSurfaceSetForceLoadMode(depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_ENABLED);
+    sceGxmDepthStencilSurfaceSetForceLoadMode((SceGxmDepthStencilSurface *)depthStencil, SCE_GXM_DEPTH_STENCIL_FORCE_LOAD_ENABLED);
 
     return ret;
 }
