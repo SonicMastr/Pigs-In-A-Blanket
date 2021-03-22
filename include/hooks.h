@@ -26,7 +26,7 @@
 #include "../include/pib.h"
 #include <taihen.h>
 
-#define NUM_HOOKS 22
+#define NUM_HOOKS 24
 
 extern tai_hook_ref_t hookRef[NUM_HOOKS];
 extern SceUID hook[NUM_HOOKS];

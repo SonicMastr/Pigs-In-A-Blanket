@@ -265,3 +265,13 @@ SceGxmErrorCode sceGxmBeginScene_loadPatch(SceGxmContext *context, unsigned int 
 
     return ret;
 }
+
+int pglPlatformCriticalSectionEnter_patch(int a1)
+{
+    return 0;
+}
+
+void pglPlatformCriticalSectionLeave_patch(int a1)
+{
+    return;
+}

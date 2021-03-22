@@ -54,7 +54,7 @@ void loadHooks(PibOptions options)
     hook[5] = taiHookFunctionExport(&hookRef[5], modInfo.name, 0xB4FE1ABB, 0x33A55EAB, eglGetConfigAttrib_intervalPatch);
     hook[6] = taiHookFunctionOffset(&hookRef[6], modInfo.modid, 0, 0x158F8, 1, pglDisplaySetSwapInterval_intervalPatch);
     hook[7] = taiHookFunctionImport(&hookRef[7], modInfo.name, 0x5ED8F994, 0x5795E898, sceDisplayWaitVblankStart_intervalPatch);
-    LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08X\n", hook[6], hook[7]);
+    LOG("Swap interval Patch: 0x%08x\nWaitVblankStart Patch: 0x%08x\n", hook[6], hook[7]);
     if ((options & PIB_SYSTEM_MODE) || (options & PIB_ENABLE_MSAA)) {
         hook[8] = taiHookFunctionOffset(&hookRef[8], modInfo.modid, 0, 0x17d24, 1, pglMemoryAllocAlign_patch);
         hook[10] = taiHookFunctionOffset(&hookRef[10], modInfo.modid, 0, 0x33074, 1, pglPlatformSurfaceCreateWindow_detect);
@@ -84,6 +84,10 @@ void loadHooks(PibOptions options)
 
     hook[20] = taiHookFunctionExport(&hookRef[20], modInfo.name, 0xB4FE1ABB, 0xFD616E54, glClear_loadPatch);
     hook[21] = taiHookFunctionImport(&hookRef[21], modInfo.name, 0xF76B66BD, 0x8734FF4E, sceGxmBeginScene_loadPatch);
+    hook[22] = taiHookFunctionOffset(&hookRef[22], modInfo.modid, 0, 0x2AAF6, 1, pglPlatformCriticalSectionEnter_patch);
+    hook[23] = taiHookFunctionOffset(&hookRef[23], modInfo.modid, 0, 0x2AB28, 1, pglPlatformCriticalSectionLeave_patch);
+
+    LOG("Hooked pglPlatformCriticalSectionEnter: 0x%08x\nHooked pglPlatformCriticalSectionLeave: 0x%08x\n", hook[22], hook[23]);
 }
 
 void releaseHooks(void)
