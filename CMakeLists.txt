@@ -33,20 +33,22 @@ add_library(${PROJECT_NAME} STATIC
   src/sha1.c
   src/shacccgpatch.c
   src/sysmodepatch.c
+  src/essl.c
 )
 
 add_definitions(-DPIB_PRX)
 
-add_library("${PROJECT_NAME}.suprx" SHARED
+add_library("lib${PROJECT_NAME}.suprx" SHARED
   src/pib.c
   src/hooks.c
   src/patches.c
   src/sha1.c
   src/shacccgpatch.c
   src/sysmodepatch.c
+  src/essl.c
 )
 
-target_link_libraries("${PROJECT_NAME}.suprx"
+target_link_libraries("lib${PROJECT_NAME}.suprx"
   SceGxm_stub_weak
   SceDisplay_stub_weak
   SceThreadmgr_stub_weak
@@ -58,4 +60,22 @@ target_link_libraries("${PROJECT_NAME}.suprx"
   SceSharedFb_stub_weak
   SceGxmInternalForVsh_stub_weak
   SceGxmInternal_stub_weak
+)
+
+install(DIRECTORY include/GLES2
+  include/EGL
+  include/KHR
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/vdsuite/user
+)
+
+install(FILES include/pib.h
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/vdsuite/user
+)
+
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION ${VDSUITE_LIBRARY_DIRECTORIES}
+)
+
+install(TARGETS "lib${PROJECT_NAME}.suprx"
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/module
 )
