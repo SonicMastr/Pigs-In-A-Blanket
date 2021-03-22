@@ -1,23 +1,26 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.19)
 
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  if(DEFINED ENV{DOLCESDK})
-    set(CMAKE_TOOLCHAIN_FILE "$ENV{DOLCESDK}/share/dolce.toolchain.cmake" CACHE PATH "toolchain file")
-  else()
-    message(FATAL_ERROR "Please define DOLCESDK to point to your SDK path!")
-  endif()
-endif()
+set(CMAKE_TOOLCHAIN_FILE "$ENV{SCE_PSP2_SDK_DIR}/host_tools/build/cmake/psp2-snc-toolchain.cmake")
 
-project(GLES20_Cube)
-include("${DOLCESDK}/share/dolce.cmake" REQUIRED)
+project(GLES20_Cube LANGUAGES C CXX)
 
-set(DOLCE_APP_NAME "OpenGL ES 2.0 Cube")
-set(DOLCE_TITLEID  "GLES00002")
-set(DOLCE_VERSION  "01.00")
+include(VitaDevelopmentSuite)
+set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DVITA -Wno-main -Wall -fno-lto -nostdlib")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(DOLCE_MKSFOEX_FLAGS "${DOLCE_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
+add_compile_options(
+  -Xdiag=2 -Xquit=0
+)
+
+include_directories(
+  ${VDSUITE_USER_INCLUDE_DIRECTORIES}
+  ${VDSUITE_STANDARD_INCLUDE_DIRECTORIES}
+  include
+)
+
+link_directories(
+  ${VDSUITE_LIBRARY_DIRECTORIES}
+  ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 add_executable(${PROJECT_NAME}
   main.c
@@ -25,22 +28,24 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   pib
+  libScePiglet_stub
+  SceShaccCg_stub
   SceLibKernel_stub
   SceThreadmgr_stub
   SceModulemgr_stub
   SceSysmodule_stub
   SceIofilemgr_stub
   SceGxm_stub
+  SceSharedFb_stub.a
+  SceGxmInternalForVsh_stub
   SceDisplay_stub
-  SceLibc_stub
-  SceLibm_stub
+  taihen_stub
 )
 
-set(DOLCE_ELF_CREATE_FLAGS "${DOLCE_ELF_CREATE_FLAGS} -h 2097152")
+VDSuiteCreateSfo(${PROJECT_NAME}.sfo param.yml)
 
-dolce_create_self(eboot.bin ${PROJECT_NAME} UNSAFE)
-
-dolce_create_vpk(${PROJECT_NAME}.vpk ${DOLCE_TITLEID} eboot.bin
-  VERSION ${DOLCE_VERSION}
-  NAME ${DOLCE_APP_NAME}
+VDSuitePackage(${PROJECT_NAME}.vpk
+  FILES
+    $<TARGET_FILE:${PROJECT_NAME}> eboot.bin
+    ${PROJECT_NAME}.sfo sce_sys/param.sfo
 )

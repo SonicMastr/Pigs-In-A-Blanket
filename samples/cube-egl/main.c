@@ -20,16 +20,20 @@
  * blowing the module wide open.
  * 
  * */
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
-#include <psp2/kernel/clib.h> 
+#include <string.h> 
 #include <pib.h>
-#include <psp2/kernel/processmgr.h>
+#include <kernel.h>
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
-#include <psp2/gxm.h>
+#include <gxm.h>
+
+#define M_PI 3.14159265358979323846 /* pi */
+
+unsigned int sceLibcHeapSize = 3*1024*1024;
 
 SceUID pigID;
 
@@ -535,7 +539,7 @@ int initEGL(void)
     return 0;
 }
 
-int main(unsigned int args, void *argp)
+int main(int args, char **argp)
 {
 /*     
 *   Always initialize PIB before callling any EGL/GLES functions 
@@ -554,15 +558,8 @@ int main(unsigned int args, void *argp)
     {
         render();
     }
-    sceKernelExitProcess(0);
-    return 0;
 
     fail:
     sceKernelExitProcess(0);
     return -1;
-}
-
-void _start(unsigned int args, void *argp)
-{
-    main(args, argp);
 }

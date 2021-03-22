@@ -146,10 +146,7 @@ typedef void              *EGLNativeDisplayType;
 typedef khronos_uintptr_t  EGLNativePixmapType;
 typedef khronos_uintptr_t  EGLNativeWindowType;
 
-#elif defined(__VITA__) || defined(__vita__)
-
-#include <psp2/gxm.h>
-#include <psp2/display.h>
+#elif defined(__psp2__) || defined(__vita__)
 
 typedef void *EGLNativeDisplayType;
 typedef void *EGLNativePixmapType;
