@@ -7,7 +7,7 @@ project(pib LANGUAGES C)
 include(VitaDevelopmentSuite)
 set(CMAKE_C_STANDARD 99)
 
-option(DEBUG "Enable Debugging Output" OFF)
+option(DEBUG "Enable Debugging Output" ON)
 
 add_compile_options(
   -Xdiag=0 -Xquit=2 -O3

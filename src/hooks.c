@@ -84,8 +84,10 @@ void loadHooks(PibOptions options)
 
     hook[20] = taiHookFunctionExport(&hookRef[20], modInfo.name, 0xB4FE1ABB, 0xFD616E54, glClear_loadPatch);
     hook[21] = taiHookFunctionImport(&hookRef[21], modInfo.name, 0xF76B66BD, 0x8734FF4E, sceGxmBeginScene_loadPatch);
-    hook[22] = taiHookFunctionOffset(&hookRef[22], modInfo.modid, 0, 0x2AAF6, 1, pglPlatformCriticalSectionEnter_patch);
-    hook[23] = taiHookFunctionOffset(&hookRef[23], modInfo.modid, 0, 0x2AB28, 1, pglPlatformCriticalSectionLeave_patch);
+    hook[22] = taiHookFunctionImport(&hookRef[22], modInfo.name, 0xCAE9ACE6, 0x1D8D7945, pglPlatformCriticalSectionEnter_patch);
+    hook[23] = taiHookFunctionImport(&hookRef[23], modInfo.name, 0x859A24B1, 0x1A372EC8, pglPlatformCriticalSectionLeave_patch);
+    hook[24] = taiHookFunctionImport(&hookRef[24], modInfo.name, 0xCAE9ACE6, 0xED53334A, pglPlatformCriticalSectionCreate_patch);
+    hook[25] = taiHookFunctionImport(&hookRef[25], modInfo.name, 0x859A24B1, 0xCB78710D, pglPlatformCriticalSectionDestroy_patch);
 
     LOG("Hooked pglPlatformCriticalSectionEnter: 0x%08x\nHooked pglPlatformCriticalSectionLeave: 0x%08x\n", hook[22], hook[23]);
 }

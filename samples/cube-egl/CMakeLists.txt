@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.19)
 
 set(CMAKE_TOOLCHAIN_FILE "$ENV{SCE_PSP2_SDK_DIR}/host_tools/build/cmake/psp2-snc-toolchain.cmake")
 
-project(GLES20_Cube LANGUAGES C CXX)
+project(GLES20_Cube LANGUAGES C)
 
 include(VitaDevelopmentSuite)
 set(CMAKE_C_STANDARD 99)

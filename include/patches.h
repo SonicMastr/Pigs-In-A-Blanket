@@ -24,7 +24,9 @@
 
 #ifdef USE_VITASDK
 #include <psp2/gxm.h>
+#include <psp2/kernel/threadmgr.h>
 #else
+#include <kernel.h>
 #include <gxm.h>
 #endif
 
@@ -63,6 +65,8 @@ SceGxmErrorCode sceGxmShaderPatcherCreateFragmentProgram_msaaPatch(SceGxmShaderP
 void glClear_loadPatch(unsigned int mask);
 SceGxmErrorCode sceGxmBeginScene_loadPatch(SceGxmContext *context, unsigned int flags, const SceGxmRenderTarget *renderTarget, const SceGxmValidRegion *validRegion, SceGxmSyncObject *vertexSyncObject, SceGxmSyncObject *fragmentSyncObject, const SceGxmColorSurface *colorSurface, const SceGxmDepthStencilSurface *depthStencil);
 
-int pglPlatformCriticalSectionEnter_patch(int a1);
-void pglPlatformCriticalSectionLeave_patch(int a1);
+int pglPlatformCriticalSectionEnter_patch(SceUID mutexId, SceInt32 lockCount, SceUInt32 *pTimeout);
+int pglPlatformCriticalSectionLeave_patch(SceUID mutexId, SceInt32 unlockCount);
+int pglPlatformCriticalSectionCreate_patch(const char *pName, SceUInt32 attr, SceInt32 initCount, const SceKernelMutexOptParam *pOptParam);
+int pglPlatformCriticalSectionDestroy_patch(SceUID mutexId);
 #endif /* PATCHES_H_ */

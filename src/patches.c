@@ -265,13 +265,27 @@ SceGxmErrorCode sceGxmBeginScene_loadPatch(SceGxmContext *context, unsigned int 
 
     return ret;
 }
-
-int pglPlatformCriticalSectionEnter_patch(int a1)
+static SceKernelLwMutexWork pWork;
+int pglPlatformCriticalSectionEnter_patch(SceUID mutexId, SceInt32 lockCount, SceUInt32 *pTimeout)
 {
-    return 0;
+    LOG("Ran sceKernelLockMutex\n");
+    return sceKernelLockLwMutex(&pWork, lockCount, pTimeout);
 }
 
-void pglPlatformCriticalSectionLeave_patch(int a1)
+int pglPlatformCriticalSectionLeave_patch(SceUID mutexId, SceInt32 unlockCount)
 {
-    return;
+    LOG("Ran sceKernelUnlockMutex\n");
+    return sceKernelUnlockLwMutex(&pWork, unlockCount);
+}
+
+int pglPlatformCriticalSectionCreate_patch(const char *pName, SceUInt32 attr, SceInt32 initCount, const SceKernelMutexOptParam *pOptParam)
+{
+    LOG("Ran sceKernelCreateMutex\n");
+    return sceKernelCreateLwMutex(&pWork, pName, attr, initCount, (SceKernelLwMutexOptParam *)0x0);
+}
+
+int pglPlatformCriticalSectionDestroy_patch(SceUID mutexId)
+{
+    LOG("Ran sceKernelDeleteMutex\n");
+    return sceKernelDeleteLwMutex(&pWork);
 }

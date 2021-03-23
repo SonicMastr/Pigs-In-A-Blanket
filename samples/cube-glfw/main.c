@@ -24,16 +24,19 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include <psp2/kernel/clib.h> 
+#include <kernel.h> 
 #include <pib.h>
-#include <psp2/kernel/processmgr.h>
-#define GLFW_INCLUDE_ES2 1
 #include <EGL/egl.h>
+#define GLFW_INCLUDE_ES2 1
 #include <GLFW/glfw3.h>
 #include <pib.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
-#include <psp2/gxm.h>
+#include <gxm.h>
+
+#define M_PI 3.14159265358979323846 /* pi */
+
+unsigned int sceLibcHeapSize = 3*1024*1024;
 
 SceUID pigID;
 
