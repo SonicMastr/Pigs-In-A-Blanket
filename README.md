@@ -5,10 +5,11 @@
 #### Now with System App and Experimental MSAAx4 Support!
 ---
 ### Compiling
-#### With DolceSDK
-- Install [DolceSDK](https://github.com/DolceSDK/doc)
-- Run ```ddpm taihen``` to install `libtaihen_stub`
-- Run ```make -j4 install```
+#### With VDSuite
+- Install [VDSuite](https://github.com/Vita-Development-Suite/doc)
+- Install [Taihen](https://bin.shotatoshounenwachigau.moe/vita/taihen/)
+- Run ```cmake . -Bbuild -G Ninja``` (Recommend Ninja)
+- ```cd build``` and ```ninja install```
 - Link libpib.a in your projects
 #### With VitaSDK
 - Install [VitaSDK](https://vitasdk.org/)
