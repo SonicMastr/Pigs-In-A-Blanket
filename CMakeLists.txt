@@ -79,7 +79,7 @@ install(FILES include/pib.h
 )
 
 install(TARGETS ${PROJECT_NAME}
-  DESTINATION ${VDSUITE_LIBRARY_DIRECTORIES}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/vdsuite
 )
 
 install(TARGETS "lib${PROJECT_NAME}.suprx"
