@@ -55,13 +55,13 @@ jobs:
         
     - name: Archive
       run: |
-          7z a ${{ github.workspace }}/PIB_Autobuild.zip ${{ github.workspace }}/sdk
+          7z a ${{ github.workspace }}/PIB-VDSuite-AutoBuild.zip ${{ github.workspace }}/sdk
           if ($LastExitCode -ne 0) { exit $LastExitCode }
     
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: autobuild
-        path: ${{ github.workspace }}/PIB_Autobuild.zip
+        name: PIB-VDSuite-AutoBuild
+        path: ${{ github.workspace }}/PIB-VDSuite-AutoBuild.zip
           
       
