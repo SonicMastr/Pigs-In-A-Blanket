@@ -28,13 +28,17 @@ unsigned int sceLibcHeapSize = 2 * 1024 * 1024;
 
 Piglet needs an SceLibc heap size of at least 2MB to intialize. Without it, the module will fail to start. This heap needs to be larger if using ```-nostdlib``` as this becomes your main heap. More info on ```-nostdlib``` support in the headers.
 
-These stubs are all linked automatically as they are combined with PIB after being built. Be sure to be aware of that.
-
-With VitaSDK:
+You'll need to link your program with:
+- libpib.a
 - liblibScePiglet_stub.a
 - libSceShaccCg_stub.a
 - libtaihen_stub.a
 - libSceAppMgr_stub.a
+
+For DolceSDK, you'll also need:
+- libSceSharedFb_stub.a
+- libSceGxmInternalForVsh_stub.a
+- libSceGxmInternal_stub.a
 
 ### Check the "Samples" folder for examples of how to use PIB to initialize OpenGLES 2.0 with EGL or GLFW.
 Yes. We have a GLFW3 port for the vita. You can use it by simply including it in your project as normal or build it here: https://github.com/SonicMastr/glfw-vita<br>Note: Button mapping is perfect and there's full touchscreen support.

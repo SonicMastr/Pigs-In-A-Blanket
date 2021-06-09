@@ -25,6 +25,10 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   pib
+  libScePiglet_stub
+  SceShaccCg_stub
+  taihen_stub
+  SceAppMgr_stub
   SceLibKernel_stub
   SceKernelThreadMgr_stub
   SceIofilemgr_stub
