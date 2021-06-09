@@ -20,12 +20,6 @@ AR      = arm-$(SDKPREFIX)-eabi-ar
 CFLAGS += -Wl,-q -Wall -Wno-incompatible-pointer-types -Wno-pointer-sign -O3 -nostartfiles -nostdlib -DVITA -D__VITA__
 ASFLAGS = $(CFLAGS)
 
-# all dependencies except libSceGxm are baked into the lib; they differ slightly between vitasdk and dolcesdk
-COMBINELIST := liblibScePiglet_stub.a libtaihen_stub.a libSceShaccCg_stub.a libSceAppMgr_stub.a
-ifeq ($(USE_VITASDK),0)
-	COMBINELIST += libSceSharedFb_stub.a libSceGxmInternalForVsh_stub.a libSceGxmInternal_stub.a
-endif
-
 all: lib
 
 debug: CFLAGS += -DDEBUG
@@ -55,16 +49,12 @@ clean:
 	@$(MAKE) -C shacc_stub clean
 	@rm -rf combine $(OBJS) lib$(LIB).a
 
-install: lib$(LIB).a
+install: all
 	@mkdir -p $(DESTDIR)$(PREFIX)/include/
 	@cp include/pib.h $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/EGL $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/GLES2 $(DESTDIR)$(PREFIX)/include/
 	@cp -r include/KHR $(DESTDIR)$(PREFIX)/include/
-	@mkdir -p combine
-	@cp $(addprefix $(DESTDIR)$(PREFIX)/lib/,$(COMBINELIST)) libpib.a combine/
-	@cd combine && $(foreach c,$(COMBINELIST),$(AR) -x $(c) && ) true
-	@cd combine && ls *.o > objs.lst && $(AR) -qc ../libpib.a @objs.lst
 	@mkdir -p $(DESTDIR)$(PREFIX)/lib/
 	@cp lib$(LIB).a $(DESTDIR)$(PREFIX)/lib/
 	@echo Installed PIB!
